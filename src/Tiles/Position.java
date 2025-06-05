@@ -9,17 +9,17 @@ public class Position {
         this.y = y;
     }
 
-    public int x() {return x;}
+    public int getX() {return x;}
 
-    public int y() {return y;}
+    public int getY() {return y;}
 
     public void setX(int x) {this.x = x;}
 
     public void setY(int y) {this.y = y;}
 
     public boolean equals(Object other) {
-        if (other instanceof Position)
-            return (this.x == ((Position) other).x()) && (this.y == ((Position) other).y()) ? true : false;
+        if (other instanceof Position pos)
+            return (this.x == pos.x) && (this.y == pos.y);
         return false;
     }
 
