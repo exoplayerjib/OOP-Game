@@ -1,3 +1,5 @@
+package Tiles;
+
 public abstract class Tile {
 
     protected char character;
