@@ -8,13 +8,18 @@ public abstract class Tile {
     protected Position position;
     protected boolean walkable;
 
-    public Tile(char sym, int x, int y){
+    public Tile(char sym){
         this.tile = sym;
-        position = new Position(x,y);
+        position = new Position();
     }
 
     public double range(Tile other){
         return Math.sqrt(Math.pow(this.position.getX() - other.position.getX(), 2) + Math.pow(this.position.getY() - other.position.getY(),2));
+    }
+
+    public void setPosition(int x, int y) {
+        position.setX(x);
+        position.setY(y);
     }
 
     @Override
