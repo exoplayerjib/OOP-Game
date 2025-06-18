@@ -22,12 +22,15 @@ public class Position {
 
     public void setY(int y) {this.y = y;}
 
+    @Override
     public boolean equals(Object other) {
-        if (other instanceof Position pos)
-            return (this.x == pos.x) && (this.y == pos.y);
-        return false;
+        if (this == other) return true;
+        if (other == null || getClass() != other.getClass()) return false;
+        Position position = (Position) other;
+        return x == position.x && y == position.y;
     }
 
+    @Override
     public String toString() {
         return  "My position is: (" + x + "," + y + ")";
     }
