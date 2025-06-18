@@ -6,7 +6,6 @@ public abstract class Tile {
 
     protected char tile;
     protected Position position;
-    protected boolean walkable;
 
     public Tile(char sym){
         this.tile = sym;
@@ -29,12 +28,10 @@ public abstract class Tile {
 
     @Override
     public boolean equals(Object other){
-        if(other instanceof Tile that){
-            return that.position.equals(this.position) &&
-                    that.tile == this.tile &&
-                    that.walkable == this.walkable;
-        }
-        return false;
+        if (other == this) return true;
+        if (other == null || getClass() != other.getClass()) return false;
+        Tile tile = (Tile) other;
+        return this.tile == tile.tile && position.equals(tile.position);
     }
 
 }
