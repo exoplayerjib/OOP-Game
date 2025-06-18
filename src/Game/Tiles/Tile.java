@@ -1,4 +1,6 @@
-package Tiles;
+package Game.Tiles;
+
+import Game.Utils.Position;
 
 public abstract class Tile {
 

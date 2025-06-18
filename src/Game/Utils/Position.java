@@ -1,4 +1,4 @@
-package Tiles;
+package Game.Utils;
 
 public class Position {
     private int x;
