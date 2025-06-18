@@ -4,8 +4,9 @@ import Game.Tiles.Tile;
 
 public class Wall extends Tile {
 
+    protected static final char wallTile = '#';
+
     public Wall(int x, int y){
-        super('#',x,y);
-        this.walkable = false;
+        super(wallTile);
     }
 }
