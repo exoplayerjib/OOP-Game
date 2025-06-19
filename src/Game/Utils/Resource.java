@@ -45,4 +45,12 @@ public class Resource {
     public String toString() {
         return amount+"/"+capacity;
     }
+
+    @Override
+    public boolean equals(Object other) {
+        if (this == other) return true;
+        if (other == null || getClass() != other.getClass()) return false;
+        Resource resource = (Resource) other;
+        return capacity == resource.capacity && amount == resource.amount;
+    }
 }
