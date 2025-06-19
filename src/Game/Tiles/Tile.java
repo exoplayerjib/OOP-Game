@@ -1,5 +1,6 @@
 package Game.Tiles;
 
+import Game.Callbacks.MessageCallback;
 import Game.Utils.Position;
 
 public abstract class Tile {
@@ -7,6 +8,7 @@ public abstract class Tile {
     protected char tile;
     protected Position position;
     protected boolean walkable;
+    protected MessageCallback messageCallback;
 
     public Tile(char sym){
         this.tile = sym;
