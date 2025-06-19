@@ -32,6 +32,6 @@ public class Position {
 
     @Override
     public String toString() {
-        return  "My position is: (" + x + "," + y + ")";
+        return  "(" + x + "," + y + ")";
     }
 }
