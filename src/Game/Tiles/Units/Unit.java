@@ -22,12 +22,28 @@ public abstract class Unit extends Tile {
         return health.getAmount() > 0;
     }
 
+    public int getAttack() {
+        return attack;
+    }
+
+    public int getDefense() {
+        return defense;
+    }
+
+    public int getCurrentHP() {
+        return health.getAmount();
+    }
+
+    public int getMaxHP() {
+        return health.getCapacity();
+    }
+
     public String getName() {
         return name;
     }
 
     public String description() {
-        return name + " (" + health.getAmount() + "/" + health.getCapacity() + ")";
+        return String.format("Name: %s\tHealth: (%d/%d)\tAttack: %d\tDefense: %d",getName(),getCurrentHP(),getMaxHP(),getAttack(),getDefense());
     }
 
     @Override
