@@ -18,6 +18,18 @@ public abstract class Unit extends Tile {
         this.defense = defense;
     }
 
+    public boolean isAlive() {
+        return health.getAmount() > 0;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String description() {
+        return name + " (" + health.getAmount() + "/" + health.getCapacity() + ")";
+    }
+
     @Override
     public boolean equals(Object other){
         if (this == other) return true;
@@ -28,5 +40,4 @@ public abstract class Unit extends Tile {
                 name.equals(unit.name) &&
                 health.equals(unit.health);
     }
-
 }
