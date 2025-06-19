@@ -41,21 +41,25 @@ public abstract class Player extends Unit {
 
     public void levelUp() {
         level++;
-        health.addCapacity(gainHealth());
+        int gainedHP = gainHealthAmount();
+        int gainedATK = gainAttackAmount();
+        int gainedDEF = gainDefenseAmount();
+        health.addCapacity(gainedHP);
         health.restore();
-        attack += gainAttack();
-        defense += gainDefense();
+        attack += gainedATK;
+        defense += gainedDEF;
+        messageCallback.send(String.format("%s leveled up to level %d! +%d HP, +%d Attack, +%d Defense", getName(), getLevel(), gainedHP, gainedATK, gainedDEF));
     }
 
-    protected int gainHealth() {
+    protected int gainHealthAmount() {
         return HEALTH_ADD * level;
     }
 
-    protected int gainAttack() {
+    protected int gainAttackAmount() {
         return ATTACK_ADD * level;
     }
 
-    protected int gainDefense() {
+    protected int gainDefenseAmount() {
         return DEFENSE_ADD * level;
     }
 
