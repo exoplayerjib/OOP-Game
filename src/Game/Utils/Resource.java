@@ -26,11 +26,11 @@ public class Resource {
     }
 
     public void setAmount(int amount) {
-        this.amount = amount;
+        this.amount = Math.min(amount, capacity);
     }
 
     public void addAmount(int amount) {
-        this.amount += amount;
+        this.amount = Math.min(this.amount + amount, capacity);
     }
 
     public void reduceAmount(int amount) {
