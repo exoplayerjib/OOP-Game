@@ -1,20 +1,19 @@
 package Game.Tiles;
 
 import Game.Callbacks.MessageCallback;
+import Game.Tiles.Units.Unit;
 import Game.Utils.Position;
 
 public abstract class Tile {
 
     protected char tile;
     protected Position position;
-    protected MessageCallback messageCallback;
 
     public Tile(char sym){
         this.tile = sym;
     }
 
-    public Tile init(Position position ,MessageCallback messageCallback){
-        this.messageCallback = messageCallback;
+    public Tile init(Position position){
         this.position = position;
         return this;
     }
@@ -26,6 +25,8 @@ public abstract class Tile {
     public void setPosition(Position position) {
         this.position = position;
     }
+
+    public abstract void accept(Unit visitor);
 
     @Override
     public String toString(){

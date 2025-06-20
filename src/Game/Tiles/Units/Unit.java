@@ -1,6 +1,11 @@
 package Game.Tiles.Units;
 
+import Game.Callbacks.MessageCallback;
+import Game.Tiles.BoardParts.Empty;
+import Game.Tiles.BoardParts.Wall;
 import Game.Tiles.Tile;
+import Game.Tiles.Units.Players.Player;
+import Game.Utils.Position;
 import Game.Utils.Resource;
 
 public abstract class Unit extends Tile {
@@ -9,6 +14,7 @@ public abstract class Unit extends Tile {
     protected Resource health;
     protected int attack;
     protected int defense;
+    protected MessageCallback messageCallback;
 
     public Unit(char sym, String name, int healthCap, int attack, int defense) {
         super(sym);
@@ -16,6 +22,13 @@ public abstract class Unit extends Tile {
         this.health = new Resource(healthCap, healthCap);
         this.attack = attack;
         this.defense = defense;
+    }
+
+
+    public Unit init(Position position, MessageCallback messageCallback) {
+        super.init(position);
+        this.messageCallback = messageCallback;
+        return this;
     }
 
     public boolean isAlive() {
@@ -41,6 +54,11 @@ public abstract class Unit extends Tile {
     public String getName() {
         return name;
     }
+
+    public abstract void visit(Empty empty);
+    public abstract void visit(Wall wall);
+    public abstract void visit(Player player);
+//    public abstract void visit(Enemy enemy);
 
     public String description() {
         return String.format("Name: %s\tHealth: (%d/%d)\tAttack: %d\tDefense: %d",getName(),getCurrentHP(),getMaxHP(),getAttack(),getDefense());
