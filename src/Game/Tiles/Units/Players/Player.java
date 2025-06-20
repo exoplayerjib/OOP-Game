@@ -94,6 +94,9 @@ public abstract class Player extends Unit {
         return specialAbility.getRange();
     }
 
+    public abstract void castAbility();
+
+
     protected abstract boolean canCastAbility();
 
     public void castSpecialAbility(){

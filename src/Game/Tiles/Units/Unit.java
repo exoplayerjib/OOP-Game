@@ -55,6 +55,8 @@ public abstract class Unit extends Tile {
         return name;
     }
 
+    abstract public void onTick();
+
     public abstract void visit(Empty empty);
     public abstract void visit(Wall wall);
     public abstract void visit(Player player);
