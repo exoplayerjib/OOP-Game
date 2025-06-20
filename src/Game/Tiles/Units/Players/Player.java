@@ -2,6 +2,7 @@ package Game.Tiles.Units.Players;
 
 import Game.Tiles.BoardParts.Empty;
 import Game.Tiles.BoardParts.Wall;
+import Game.Tiles.Units.Actions.SpecialAbility;
 import Game.Tiles.Units.Enemies.Enemy;
 import Game.Tiles.Units.Unit;
 
@@ -13,6 +14,7 @@ public abstract class Player extends Unit {
     protected static final int HEALTH_ADD = 10;
     protected int experience;
     protected int level;
+    protected SpecialAbility specialAbility;
 
     public Player(String name, int healthCap, int attack, int defense) {
         super(playerSymbol,name,healthCap,attack,defense);
@@ -86,6 +88,18 @@ public abstract class Player extends Unit {
     @Override
     public void accept(Unit visitor){
         visitor.visit(this);
+    }
+
+    public int getSpecialAbilityRange() {
+        return specialAbility.getRange();
+    }
+
+    protected abstract boolean canCastAbility();
+
+    public void castSpecialAbility(){
+        if (canCastAbility()) {
+            specialAbility.execute();
+        }
     }
 
     @Override
