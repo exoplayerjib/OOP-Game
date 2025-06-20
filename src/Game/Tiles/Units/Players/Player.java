@@ -1,5 +1,8 @@
 package Game.Tiles.Units.Players;
 
+import Game.Tiles.BoardParts.Empty;
+import Game.Tiles.BoardParts.Wall;
+import Game.Tiles.Units.Enemies.Enemy;
 import Game.Tiles.Units.Unit;
 
 public abstract class Player extends Unit {
@@ -15,6 +18,18 @@ public abstract class Player extends Unit {
         super(playerSymbol,name,healthCap,attack,defense);
         this.experience = 0;
         this.level = 1;
+    }
+
+    protected int gainHealthAmount() {
+        return HEALTH_ADD * level;
+    }
+
+    protected int gainAttackAmount() {
+        return ATTACK_ADD * level;
+    }
+
+    protected int gainDefenseAmount() {
+        return DEFENSE_ADD * level;
     }
 
     public int getExperience() {
@@ -51,16 +66,26 @@ public abstract class Player extends Unit {
         messageCallback.send(String.format("%s leveled up to level %d! +%d HP, +%d Attack, +%d Defense", getName(), getLevel(), gainedHP, gainedATK, gainedDEF));
     }
 
-    protected int gainHealthAmount() {
-        return HEALTH_ADD * level;
+    @Override
+    public void visit(Enemy enemy){
+        return;
+    }
+    @Override
+    public void visit(Player player){
+        return;
+    }
+    @Override
+    public void visit(Wall wall){
+        return;
+    }
+    @Override
+    public void visit(Empty empty){
+        return;
     }
 
-    protected int gainAttackAmount() {
-        return ATTACK_ADD * level;
-    }
-
-    protected int gainDefenseAmount() {
-        return DEFENSE_ADD * level;
+    @Override
+    public void accept(Unit visitor){
+        visitor.visit(this);
     }
 
     @Override

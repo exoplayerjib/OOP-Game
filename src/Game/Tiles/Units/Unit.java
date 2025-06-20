@@ -1,12 +1,12 @@
 package Game.Tiles.Units;
 
 import Game.Callbacks.MessageCallback;
-import Game.Tiles.BoardParts.Empty;
-import Game.Tiles.BoardParts.Wall;
+import Game.Tiles.BoardParts.*;
 import Game.Tiles.Tile;
 import Game.Tiles.Units.Players.Player;
-import Game.Utils.Position;
-import Game.Utils.Resource;
+import Game.Utils.*;
+import Game.Tiles.Units.Enemies.Enemy;
+
 
 public abstract class Unit extends Tile {
 
@@ -58,7 +58,7 @@ public abstract class Unit extends Tile {
     public abstract void visit(Empty empty);
     public abstract void visit(Wall wall);
     public abstract void visit(Player player);
-//    public abstract void visit(Enemy enemy);
+    public abstract void visit(Enemy enemy);
 
     public String description() {
         return String.format("Name: %s\tHealth: (%d/%d)\tAttack: %d\tDefense: %d",getName(),getCurrentHP(),getMaxHP(),getAttack(),getDefense());
