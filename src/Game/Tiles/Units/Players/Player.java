@@ -14,6 +14,7 @@ public abstract class Player extends Unit {
     protected static final int HEALTH_ADD = 10;
     protected int experience;
     protected int level;
+    /// FIXME Might not need that
     protected SpecialAbility specialAbility;
 
     public Player(String name, int healthCap, int attack, int defense) {
@@ -42,18 +43,19 @@ public abstract class Player extends Unit {
         return level * XP_REQ;
     }
 
+    public int getLevel() {
+        return level;
+    }
+
     public void addExperience(int experience) {
         this.experience += experience;
+        messageCallback.send(String.format("%s gained %d experience points", getName(), experience));
         int levelReq = getReqXP();
         while (experience >= levelReq) {
             levelUp();
             experience -= levelReq;
             levelReq = getReqXP();
         }
-    }
-
-    public int getLevel() {
-        return level;
     }
 
     public void levelUp() {
@@ -70,7 +72,11 @@ public abstract class Player extends Unit {
 
     @Override
     public void visit(Enemy enemy){
-        return;
+        engageCombat(enemy);
+        if(!enemy.isAlive()) {
+            addExperience(enemy.getExperienceValue());
+            /// TODO needs to implement swap position and removing the enemy from the game
+        }
     }
     @Override
     public void visit(Player player){
@@ -78,10 +84,11 @@ public abstract class Player extends Unit {
     }
     @Override
     public void visit(Wall wall){
-        return;
+        messageCallback.send(String.format("%s was hit a wall!",getName()));
     }
     @Override
     public void visit(Empty empty){
+        /// TODO implement movement when ready
         return;
     }
 
@@ -94,16 +101,11 @@ public abstract class Player extends Unit {
         return specialAbility.getRange();
     }
 
-    public abstract void castAbility();
-
-
     protected abstract boolean canCastAbility();
 
-    public void castSpecialAbility(){
-        if (canCastAbility()) {
-            specialAbility.execute();
-        }
-    }
+    /// TODO Add Board as an argument
+    public abstract void castSpecialAbility();
+
 
     @Override
     public String toString() {
