@@ -18,11 +18,7 @@ public abstract class SpecialAbility implements Action{
         onCast();
     }
 
-    public void setTargets(List<Enemy> targets){
-        this.targets = targets;
-    }
-
-    public String getName(){
+    public String getAbilityName(){
         return name;
     }
 

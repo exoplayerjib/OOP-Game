@@ -62,12 +62,12 @@ public class Warrior extends Player {
     @Override
     public void castSpecialAbility() {
         if (canCastAbility()) {
-            specialAbility
-                    .setTargets(board.getEnemies().
-                            stream().
-                            filter(e->range(e) <= specialAbility.getRange())
-                            .collect(Collectors.toList()));
             specialAbility.execute();
+        }
+        else {
+            messageCallback.send(
+                    String.format("%s tried to cast %s, but there is a cooldown: (%d/%d)",
+                    getName(),specialAbility.getAbilityName(),remainingCooldown,abilityCooldown));
         }
     }
 
@@ -86,14 +86,21 @@ public class Warrior extends Player {
 
         @Override
         protected void onCast() {
+            this.targets =  board.getEnemies().
+                            stream().
+                            filter(e->range(e) <= this.getRange())
+                            .collect(Collectors.toList());
             resetCooldown();
             health.addAmount(10 * defense);
-            Random random = new Random();
+            messageCallback.send(String.format("%s casts %s, increasing health by %d",getName(), getAbilityName(),10*defense));
             Enemy target = targets.get(random.nextInt(targets.size()));
-            if (target != null){
-                target.takeDamage( (int) (0.1*getCurrentHP()));
+            if (targets.isEmpty()) {
+                int defenderRoll = target.rollDefense();
+                int damage = Math.max(0, (int) (0.1 * getCurrentHP()) - defenderRoll);
+                target.takeDamage(damage);
+                messageCallback.send(String.format("%s hit %s for %d ability damage",getName(), target.getName(), damage));
+                postCombat(target);
             }
-
         }
     }
 }

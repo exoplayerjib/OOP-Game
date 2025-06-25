@@ -4,6 +4,7 @@ import Game.Board.Board;
 import Game.Callbacks.MessageCallback;
 import Game.Tiles.BoardParts.Empty;
 import Game.Tiles.BoardParts.Wall;
+import Game.Tiles.Tile;
 import Game.Tiles.Units.Actions.Action;
 import Game.Tiles.Units.Actions.Movement;
 import Game.Tiles.Units.Actions.SpecialAbility;
@@ -97,11 +98,19 @@ public abstract class Player extends Unit {
     @Override
     public void visit(Enemy enemy){
         engageCombat(enemy);
+        Tile empty = postCombat(enemy);
+        if (empty != null)
+            board.swapPositions(this, empty);
+    }
+
+    protected Tile postCombat(Enemy enemy){
         if(!enemy.isAlive()) {
-            addExperience(enemy.getExperienceValue());
-            board.swapPositions(this,enemy);
-            board.removeEnemy(enemy); ///might cause errors check
+            int xpValue = enemy.getExperienceValue();
+            messageCallback.send(String.format("%s killed %s, gaining %d experience points!",getName(),enemy.getName(),xpValue));
+            addExperience(xpValue);
+            return board.removeEnemy(enemy); ///might cause errors check
         }
+        return null;
     }
 
     @Override
@@ -131,6 +140,10 @@ public abstract class Player extends Unit {
         return this::castSpecialAbility;
     }
 
+    //TODO might not need this
+    protected Player getPlayer(){ //used in special abilities
+        return this;
+    }
     public void takeTurn() {
         char input = inputQuery.getInput();
         if (ACTIONS.containsKey(input))

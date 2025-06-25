@@ -22,6 +22,7 @@ public abstract class Unit extends Tile {
     protected int defense;
     protected MessageCallback messageCallback;
     protected Board board;
+    protected Random random = new Random();
 
     /// FIXME might not need this
     protected HashMap<Position, Function<Unit,Movement>> movementMap = new HashMap<>(){{
@@ -93,16 +94,27 @@ public abstract class Unit extends Tile {
     public abstract void visit(Player player);
     public abstract void visit(Enemy enemy);
 
+
+    public int rollDefense(){
+        int defenseRoll = random.nextInt(getDefense()+1);
+        messageCallback.send(String.format("%s rolled %d defense points",getName(),defenseRoll));
+        return defenseRoll;
+    }
+
+    public int rollAttack(){
+        int attackRoll = random.nextInt(getAttack()+1);
+        messageCallback.send(String.format("%s rolled %d attack points",getName(),attackRoll));
+        return attackRoll;
+    }
+
     protected void engageCombat(Unit defender){
         Random random = new Random();
         messageCallback.send(String.format("%s engaged in combat with %s",getName(),defender.getName()));
         messageCallback.send(description());
         messageCallback.send(defender.description());
-        int attackRand = random.nextInt(getAttack()+1);
-        messageCallback.send(String.format("%s rolled %d attack points",getName(),attackRand));
-        int defenseRand = random.nextInt(defender.getDefense()+1);
-        messageCallback.send(String.format("%s rolled %d defense points",getName(),defenseRand));
-        int damage = Math.max(0,attackRand - defenseRand);
+        int attackerRoll = this.rollAttack();
+        int defenderRoll = defender.rollDefense();
+        int damage = Math.max(0,attackerRoll - defenderRoll);
         messageCallback.send(String.format("%s dealt %d damage to %s",getName(),damage,defender.getName()));
         defender.takeDamage(damage);
         if (!defender.isAlive()){

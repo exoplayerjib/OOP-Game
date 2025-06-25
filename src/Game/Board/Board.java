@@ -53,9 +53,12 @@ public  class Board {
         setTile(p1,operatee);
     }
 
-    public void removeEnemy(Enemy enemy){
+    public Tile removeEnemy(Enemy enemy){
         enemies.remove(enemy);
-        setTile(enemy.getPosition(),new Empty());
+        Empty empty = new Empty();
+        empty.init(enemy.getPosition());
+        setTile(enemy.getPosition(), empty);
+        return empty;
     }
 
     public List<Enemy> getEnemies(){
