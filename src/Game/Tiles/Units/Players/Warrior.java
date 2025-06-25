@@ -6,27 +6,12 @@ import Game.Tiles.Units.Unit;
 import java.util.function.Supplier;
 
 public class Warrior extends Player {
-
-
-
     private final int abilityCooldown;
     private int remainingCooldown;
 
     public Warrior(String name, int healthCap, int attack, int defense,int abilityCooldown){
         super(name, healthCap, attack, defense);
         this.abilityCooldown = abilityCooldown;
-        remainingCooldown = 0;
-    }
-
-
-    @Override
-    protected boolean canCastAbility() {
-        return remainingCooldown == 0;
-    }
-
-    @Override
-    public void levelUp() {
-        super.levelUp();
         remainingCooldown = 0;
     }
 
@@ -46,21 +31,49 @@ public class Warrior extends Player {
     }
 
     @Override
-    public void onTick() {
-        if (remainingCooldown > 0) {
-            remainingCooldown--;
-        }
+    public void levelUp() {
+        super.levelUp();
+        remainingCooldown = 0;
     }
 
     @Override
-    public void castAbility() {
-        if(canCastAbility()){
-            specialAbility.execute();
+    public void onTick() {
+        reduceCooldown();
+    }
+
+    private void resetCooldown(){
+        remainingCooldown = abilityCooldown;
+    }
+
+    private void reduceCooldown(){
+        if (remainingCooldown > 0)
+            remainingCooldown--;
+    }
+
+    private void reduceCooldown(int amount){
+        if (remainingCooldown > 0)
+            remainingCooldown = Math.max(0,remainingCooldown - amount);
+    }
+
+    @Override
+    protected boolean canCastAbility() {
+        return remainingCooldown == 0;
+    }
+
+    @Override
+    public void castSpecialAbility() {
+        if (canCastAbility()) {
+        /// TODO implement when board is ready
         }
+        return;
+    }
+
+    @Override
+    public String description(){
+        return super.description() + "\tAbility Cooldown: " + remainingCooldown + "/" + abilityCooldown;
     }
 
     private class AvengersShield extends SpecialAbility{
-
         private static final int RANGE = 3;
 
         public AvengersShield(Supplier<Unit> targets){
@@ -69,10 +82,9 @@ public class Warrior extends Player {
 
         @Override
         protected void onCast() {
-            remainingCooldown = abilityCooldown;
-            health.setAmount(health.getCapacity() + 10 * defense);
-            /// implement Combat and make take 10% of this.health as damage
+            resetCooldown();
+            health.addAmount(10 * defense);
+            targets.get().takeDamage( (int) (0.1 * health.getAmount()));
         }
     }
-
 }

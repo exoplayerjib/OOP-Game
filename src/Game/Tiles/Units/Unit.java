@@ -6,6 +6,7 @@ import Game.Tiles.Tile;
 import Game.Tiles.Units.Players.Player;
 import Game.Utils.*;
 import Game.Tiles.Units.Enemies.Enemy;
+import java.util.Random;
 
 
 public abstract class Unit extends Tile {
@@ -55,12 +56,34 @@ public abstract class Unit extends Tile {
         return name;
     }
 
+    public void takeDamage(int damage){
+        if (damage > 0)
+            health.reduceAmount(damage);
+    }
+
     abstract public void onTick();
 
     public abstract void visit(Empty empty);
     public abstract void visit(Wall wall);
     public abstract void visit(Player player);
     public abstract void visit(Enemy enemy);
+
+    protected void engageCombat(Unit defender){
+        Random random = new Random();
+        messageCallback.send(String.format("%s engaged in combat with %s",getName(),defender.getName()));
+        messageCallback.send(description());
+        messageCallback.send(defender.description());
+        int attackRand = random.nextInt(getAttack()+1);
+        messageCallback.send(String.format("%s rolled %d attack points",getName(),attackRand));
+        int defenseRand = random.nextInt(defender.getDefense()+1);
+        messageCallback.send(String.format("%s rolled %d defense points",getName(),defenseRand));
+        int damage = Math.max(0,attackRand - defenseRand);
+        messageCallback.send(String.format("%s dealt %d damage to %s",getName(),damage,defender.getName()));
+        defender.takeDamage(damage);
+        if (!defender.isAlive()){
+            messageCallback.send(String.format("%s killed %s",getName(),defender.getName()));
+        }
+    }
 
     public String description() {
         return String.format("Name: %s\tHealth: (%d/%d)\tAttack: %d\tDefense: %d",getName(),getCurrentHP(),getMaxHP(),getAttack(),getDefense());

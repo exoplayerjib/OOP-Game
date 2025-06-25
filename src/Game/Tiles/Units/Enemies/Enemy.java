@@ -13,6 +13,10 @@ public abstract class Enemy extends Unit {
         this.experienceValue = experienceValue;
     }
 
+    public int getExperienceValue() {
+        return experienceValue;
+    }
+
     @Override
     public void accept(Unit visitor){
         visitor.visit(this);
@@ -20,18 +24,21 @@ public abstract class Enemy extends Unit {
 
     @Override
     public void visit(Enemy enemy){
-        return;
+        messageCallback.send(String.format("%s has bumped into %s",getName(),enemy.getName()));
     }
     @Override
     public void visit(Player player){
-        return;
+        engageCombat(player);
     }
+
     @Override
     public void visit(Wall wall){
+        ///TODO
         return;
     }
     @Override
     public void visit(Empty empty){
+        /// TODO
         return;
     }
 
