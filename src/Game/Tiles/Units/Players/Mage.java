@@ -7,13 +7,14 @@ import Game.Utils.Resource;
 import java.util.stream.Collectors;
 
 public class Mage extends Player{
+    private static final int MANA_INCREASE = 25;
+    private static int SPELL_POWER_INCREASE = 10;
+
     private Resource mana;
     private int abilityCost;
     private int spellPower;
     private int hitCount;
     private int abilityRange;
-    private final int MANA_INCREASE = 25;
-    private final int SPELL_POWER_INCREASE = 10;
 
     public Mage(String name, int healthCap, int attack, int defense, int initialMana,int abilityCost,
                 int spellPower, int hitCount, int abilityRange){
