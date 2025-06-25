@@ -1,36 +1,62 @@
 package Game.Board;
 
 import Game.Callbacks.MessageCallback;
+import Game.Tiles.BoardParts.Empty;
 import Game.Tiles.Tile;
 import Game.Tiles.Units.Enemies.Enemy;
 import Game.Tiles.Units.Players.Player;
 import Game.Utils.Position;
-
+import java.util.ArrayList;
 import java.util.List;
 
 
-/// FIXME make non-abstract
-public abstract class Board {
-//    private final int rows;
-//    private final int cols;
-//    private final Tile[][] board;
-//    private final List<Enemy> enemies;
-//    private Player player;
-//    private final MessageCallback messageCallback;
+public  class Board {
+    private final int rows;
+    private final int cols;
+    private final Tile[][] board;
+    private final List<Enemy> enemies;
+    private Player player;
+    private final MessageCallback messageCallback;
     //TODO ALL!!!!
 
-    public Board(){}
+    public Board(){
+        this.rows = 10;
+        this.cols = 10;
+        this.board = new Tile[rows][cols];
+        this.enemies = new ArrayList<>();
+        this.player = null;
+        this.messageCallback = null;
+    }
 
-    public abstract void swapPositions(Tile tile1, Tile tile2);
+    public boolean inBounds(Position position){
+        return position.getX() >= 0 && position.getX() < cols && position.getY() >= 0 && position.getY() < rows;
+    }
 
-    public abstract List<Enemy> getEnemies();
+    public Tile getTile(Position position){
+        if (inBounds(position))
+            return board[position.getX()][position.getY()];
+        else
+            return null;
+    }
 
-    public abstract List<Enemy> getLivingEnemies();
+    public void setTile(Position position, Tile tile){
+        if (inBounds(position))
+            board[position.getX()][position.getY()] = tile;
+    }
 
-    public abstract Player getPlayer();
+    public void swapPositions(Tile operator, Tile operatee){
+        Position p1 = operator.getPosition();
+        Position p2 = operatee.getPosition();
+        operator.setPosition(p2);
+        operatee.setPosition(p1);
+        setTile(p2,operator);
+        setTile(p1,operatee);
+    }
 
-    public abstract void setTile(Position position, Tile tile);
-
+    public void removeEnemy(Enemy enemy){
+        enemies.remove(enemy);
+        setTile(enemy.getPosition(),new Empty());
+    }
 
 
 }

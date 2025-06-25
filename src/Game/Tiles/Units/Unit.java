@@ -1,12 +1,17 @@
 package Game.Tiles.Units;
 
+import Game.Board.Board;
 import Game.Callbacks.MessageCallback;
 import Game.Tiles.BoardParts.*;
 import Game.Tiles.Tile;
+import Game.Tiles.Units.Actions.Movement;
 import Game.Tiles.Units.Players.Player;
 import Game.Utils.*;
 import Game.Tiles.Units.Enemies.Enemy;
+
+import java.util.HashMap;
 import java.util.Random;
+import java.util.function.Function;
 
 
 public abstract class Unit extends Tile {
@@ -16,6 +21,15 @@ public abstract class Unit extends Tile {
     protected int attack;
     protected int defense;
     protected MessageCallback messageCallback;
+    protected Board board;
+
+    protected HashMap<Position, Function<Unit,Movement>> movementMap = new HashMap<>(){{
+        put(position.up(),unit -> new Movement.Up(unit,board));
+        put(position.down(),unit -> new Movement.Down(unit,board));
+        put(position.left(),unit -> new Movement.Left(unit,board));
+        put(position.right(),unit -> new Movement.Right(unit,board));
+        put(position,unit -> new Movement.Stay(unit,board));
+    }};
 
     public Unit(char sym, String name, int healthCap, int attack, int defense) {
         super(sym);
@@ -26,9 +40,10 @@ public abstract class Unit extends Tile {
     }
 
 
-    public Unit init(Position position, MessageCallback messageCallback) {
+    public Unit init(Position position, MessageCallback messageCallback, Board board) {
         super.init(position);
         this.messageCallback = messageCallback;
+        this.board = board;
         return this;
     }
 
@@ -60,6 +75,15 @@ public abstract class Unit extends Tile {
         if (damage > 0)
             health.reduceAmount(damage);
     }
+
+    protected void tryMove(Position position){
+        if (movementMap.containsKey(position)) {
+            Movement movement = movementMap.get(position).apply(this);
+            movement.execute();
+        }
+    }
+
+    abstract void takeTurn();
 
     abstract public void onTick();
 

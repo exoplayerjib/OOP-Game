@@ -2,6 +2,7 @@ package Game.Tiles.Units.Players;
 
 import Game.Tiles.BoardParts.Empty;
 import Game.Tiles.BoardParts.Wall;
+import Game.Tiles.Units.Actions.Action;
 import Game.Tiles.Units.Actions.SpecialAbility;
 import Game.Tiles.Units.Enemies.Enemy;
 import Game.Tiles.Units.Unit;
@@ -14,8 +15,8 @@ public abstract class Player extends Unit {
     protected static final int HEALTH_ADD = 10;
     protected int experience;
     protected int level;
-    /// FIXME Might not need that
-    protected SpecialAbility specialAbility;
+
+
 
     public Player(String name, int healthCap, int attack, int defense) {
         super(playerSymbol,name,healthCap,attack,defense);
@@ -75,21 +76,22 @@ public abstract class Player extends Unit {
         engageCombat(enemy);
         if(!enemy.isAlive()) {
             addExperience(enemy.getExperienceValue());
-            /// TODO needs to implement swap position and removing the enemy from the game
+            board.swapPositions(this,enemy);
+            board.removeEnemy(enemy); ///might cause errors check
         }
     }
+
     @Override
     public void visit(Player player){
         return;
     }
     @Override
     public void visit(Wall wall){
-        messageCallback.send(String.format("%s was hit a wall!",getName()));
+        messageCallback.send(String.format("%s hit a wall!",getName()));
     }
     @Override
     public void visit(Empty empty){
-        /// TODO implement movement when ready
-        return;
+        board.swapPositions(this,empty);
     }
 
     @Override
@@ -97,13 +99,9 @@ public abstract class Player extends Unit {
         visitor.visit(this);
     }
 
-    public int getSpecialAbilityRange() {
-        return specialAbility.getRange();
-    }
 
     protected abstract boolean canCastAbility();
 
-    /// TODO Add Board as an argument
     public abstract void castSpecialAbility();
 
 
@@ -125,5 +123,4 @@ public abstract class Player extends Unit {
     public String description(){
         return String.format("%s\tLevel: %d\tExperience: %d/%d", super.description(), getLevel(), getExperience(), getReqXP());
     }
-
 }
