@@ -1,9 +1,12 @@
 package Game.Tiles.Units.Players;
 
 import Game.Tiles.Units.Actions.SpecialAbility;
+import Game.Tiles.Units.Enemies.Enemy;
 import Game.Tiles.Units.Unit;
 
+import java.util.Random;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 public class Warrior extends Player {
     private final int abilityCooldown;
@@ -13,6 +16,7 @@ public class Warrior extends Player {
         super(name, healthCap, attack, defense);
         this.abilityCooldown = abilityCooldown;
         remainingCooldown = 0;
+        this.specialAbility = new AvengersShield();
     }
 
     @Override
@@ -50,11 +54,6 @@ public class Warrior extends Player {
             remainingCooldown--;
     }
 
-    private void reduceCooldown(int amount){
-        if (remainingCooldown > 0)
-            remainingCooldown = Math.max(0,remainingCooldown - amount);
-    }
-
     @Override
     protected boolean canCastAbility() {
         return remainingCooldown == 0;
@@ -63,9 +62,13 @@ public class Warrior extends Player {
     @Override
     public void castSpecialAbility() {
         if (canCastAbility()) {
-        /// TODO implement when board is ready
+            specialAbility
+                    .setTargets(board.getEnemies().
+                            stream().
+                            filter(e->range(e) <= specialAbility.getRange())
+                            .collect(Collectors.toList()));
+            specialAbility.execute();
         }
-        return;
     }
 
     @Override
@@ -75,16 +78,22 @@ public class Warrior extends Player {
 
     private class AvengersShield extends SpecialAbility{
         private static final int RANGE = 3;
+        private static final String NAME = "Avenger's Shield";
 
-        public AvengersShield(Supplier<Unit> targets){
-            super(RANGE,targets);
+        public AvengersShield(){
+            super(RANGE,NAME);
         }
 
         @Override
         protected void onCast() {
             resetCooldown();
             health.addAmount(10 * defense);
-            targets.get().takeDamage( (int) (0.1 * health.getAmount()));
+            Random random = new Random();
+            Enemy target = targets.get(random.nextInt(targets.size()));
+            if (target != null){
+                target.takeDamage( (int) (0.1*getCurrentHP()));
+            }
+
         }
     }
 }

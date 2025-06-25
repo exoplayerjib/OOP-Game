@@ -58,5 +58,7 @@ public  class Board {
         setTile(enemy.getPosition(),new Empty());
     }
 
-
+    public List<Enemy> getEnemies(){
+        return enemies;
+    }
 }

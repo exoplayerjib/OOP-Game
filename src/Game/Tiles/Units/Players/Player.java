@@ -1,11 +1,19 @@
 package Game.Tiles.Units.Players;
 
+import Game.Board.Board;
+import Game.Callbacks.MessageCallback;
 import Game.Tiles.BoardParts.Empty;
 import Game.Tiles.BoardParts.Wall;
 import Game.Tiles.Units.Actions.Action;
+import Game.Tiles.Units.Actions.Movement;
 import Game.Tiles.Units.Actions.SpecialAbility;
 import Game.Tiles.Units.Enemies.Enemy;
 import Game.Tiles.Units.Unit;
+import Game.Utils.Position;
+import View.InputQuery;
+
+import java.util.Map;
+import java.util.function.Function;
 
 public abstract class Player extends Unit {
     public static final char playerSymbol = '@';
@@ -15,13 +23,28 @@ public abstract class Player extends Unit {
     protected static final int HEALTH_ADD = 10;
     protected int experience;
     protected int level;
+    protected SpecialAbility specialAbility;
+    protected InputQuery inputQuery;
 
-
+    private static final Map<Character, Function<Player, Action>> ACTIONS = Map.of(
+            'w', p -> new Movement.Up(p, p.board),
+            's', p -> new Movement.Down(p, p.board),
+            'a', p -> new Movement.Left(p, p.board),
+            'd', p -> new Movement.Right(p, p.board),
+            'q', p -> new Movement.Stay(p, p.board),          // “do nothing”
+            'e', Player::createAbilityAction                 // see helper below
+    );
 
     public Player(String name, int healthCap, int attack, int defense) {
         super(playerSymbol,name,healthCap,attack,defense);
         this.experience = 0;
         this.level = 1;
+    }
+
+    public Player init(Position position, MessageCallback messageCallback, Board board, InputQuery inputQuery){
+        super.init(position,messageCallback,board);
+        this.inputQuery = inputQuery;
+        return this;
     }
 
     protected int gainHealthAmount() {
@@ -104,6 +127,15 @@ public abstract class Player extends Unit {
 
     public abstract void castSpecialAbility();
 
+    private Action createAbilityAction() {
+        return this::castSpecialAbility;
+    }
+
+    public void takeTurn() {
+        char input = inputQuery.getInput();
+        if (ACTIONS.containsKey(input))
+            ACTIONS.get(input).apply(this).execute();
+    }
 
     @Override
     public String toString() {

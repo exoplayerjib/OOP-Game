@@ -23,6 +23,7 @@ public abstract class Unit extends Tile {
     protected MessageCallback messageCallback;
     protected Board board;
 
+    /// FIXME might not need this
     protected HashMap<Position, Function<Unit,Movement>> movementMap = new HashMap<>(){{
         put(position.up(),unit -> new Movement.Up(unit,board));
         put(position.down(),unit -> new Movement.Down(unit,board));
