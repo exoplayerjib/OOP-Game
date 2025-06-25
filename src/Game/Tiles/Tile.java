@@ -22,6 +22,10 @@ public abstract class Tile {
         return Math.sqrt(Math.pow(this.position.getX() - other.position.getX(), 2) + Math.pow(this.position.getY() - other.position.getY(),2));
     }
 
+    public Position getPosition(){
+        return this.position;
+    }
+
     public void setPosition(Position position) {
         this.position = position;
     }

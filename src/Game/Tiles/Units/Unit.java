@@ -1,5 +1,6 @@
 package Game.Tiles.Units;
 
+import Game.Board.Board;
 import Game.Callbacks.MessageCallback;
 import Game.Tiles.BoardParts.*;
 import Game.Tiles.Tile;
@@ -60,6 +61,14 @@ public abstract class Unit extends Tile {
         if (damage > 0)
             health.reduceAmount(damage);
     }
+
+    protected void tryMove(Position position, Board board){
+        Tile target = board.getTile(position);
+        if (target != null)
+            target.accept(this);
+    }
+
+    abstract void takeTurn();
 
     abstract public void onTick();
 
