@@ -14,6 +14,18 @@ public class Position {
         this.y = y;
     }
 
+    public Position up(){
+        return new Position(x,y+1);
+    }
+
+    public Position down(){
+        return new Position(x,y-1);
+    }
+
+    public Position left(){ return new Position(x-1,0); }
+
+    public Position right(){ return new Position(x+1,0); }
+
     public int getX() {return x;}
 
     public int getY() {return y;}
