@@ -90,7 +90,6 @@ public abstract class Unit extends Tile {
     }
 
     protected void engageCombat(Unit defender){
-        Random random = new Random();
         messageCallback.send(String.format("%s engaged in combat with %s",getName(),defender.getName()));
         messageCallback.send(description());
         messageCallback.send(defender.description());

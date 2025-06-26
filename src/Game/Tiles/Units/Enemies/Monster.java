@@ -55,4 +55,10 @@ public class Monster extends Enemy {
         };
         movement.execute();
     }
+
+    @Override
+    public String description(){
+        return super.description() + "\tVision Range: " + visionRange;
+    }
+
 }
