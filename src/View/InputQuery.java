@@ -1,7 +1,7 @@
 package View;
 
-import Game.Tiles.Units.Actions.Action;
+import Game.Tiles.Units.Players.Player.Actions;
 
 public interface InputQuery {
-    public char getInput();
+    public Actions getInput();
 }

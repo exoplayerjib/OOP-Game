@@ -13,9 +13,6 @@ import Game.Tiles.Units.Unit;
 import Game.Utils.Position;
 import View.InputQuery;
 
-import java.util.Map;
-import java.util.function.Function;
-
 public abstract class Player extends Unit {
     public static final char playerSymbol = '@';
     protected static final int XP_REQ = 50;
@@ -27,14 +24,9 @@ public abstract class Player extends Unit {
     protected SpecialAbility specialAbility;
     protected InputQuery inputQuery;
 
-    private static final Map<Character, Function<Player, Action>> ACTIONS = Map.of(
-            'w', p -> new Movement.Up(p, p.board),
-            's', p -> new Movement.Down(p, p.board),
-            'a', p -> new Movement.Left(p, p.board),
-            'd', p -> new Movement.Right(p, p.board),
-            'q', p -> new Movement.Stay(p, p.board),          // “do nothing”
-            'e', Player::createAbilityAction                 // see helper below
-    );
+    public enum Actions{
+        UP, DOWN, LEFT, RIGHT, STAY, CAST
+    }
 
     public Player(String name, int healthCap, int attack, int defense) {
         super(playerSymbol,name,healthCap,attack,defense);
@@ -136,18 +128,21 @@ public abstract class Player extends Unit {
 
     public abstract void castSpecialAbility();
 
-    private Action createAbilityAction() {
-        return this::castSpecialAbility;
+    public void takeTurn() {
+        Actions action = inputQuery.getInput();
+        tryAct(action);
     }
 
-    //TODO might not need this
-    protected Player getPlayer(){ //used in special abilities
-        return this;
-    }
-    public void takeTurn() {
-        char input = inputQuery.getInput();
-        if (ACTIONS.containsKey(input))
-            ACTIONS.get(input).apply(this).execute();
+    protected void tryAct(Actions action) {
+        Action exec = switch (action) {
+            case UP -> new Movement.Up(this,board);
+            case DOWN -> new Movement.Down(this,board);
+            case LEFT -> new Movement.Left(this,board);
+            case RIGHT -> new Movement.Right(this,board);
+            case STAY -> new Movement.Stay(this,board);
+            case CAST -> this::castSpecialAbility;
+        };
+        exec.execute();
     }
 
     @Override

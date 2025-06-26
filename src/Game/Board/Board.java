@@ -61,6 +61,10 @@ public  class Board {
         return empty;
     }
 
+    public Player getPlayer() {
+        return player;
+    }
+
     public List<Enemy> getEnemies(){
         return enemies;
     }

@@ -8,7 +8,7 @@ import Game.Tiles.Units.Unit;
 public abstract class Enemy extends Unit {
     protected int experienceValue;
 
-    public Enemy(char sym, String name, int healthCap, int attack,int defense, int experienceValue) {
+    public Enemy(char sym, String name, int healthCap, int attack, int defense, int experienceValue) {
         super(sym ,name ,healthCap ,attack ,defense);
         this.experienceValue = experienceValue;
     }
@@ -33,13 +33,11 @@ public abstract class Enemy extends Unit {
 
     @Override
     public void visit(Wall wall){
-        ///TODO
         return;
     }
     @Override
     public void visit(Empty empty){
-        /// TODO
-        return;
+        board.swapPositions(this,empty);
     }
 
 }

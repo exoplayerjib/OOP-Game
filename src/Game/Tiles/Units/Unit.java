@@ -4,17 +4,14 @@ import Game.Board.Board;
 import Game.Callbacks.MessageCallback;
 import Game.Tiles.BoardParts.*;
 import Game.Tiles.Tile;
-import Game.Tiles.Units.Actions.Movement;
 import Game.Tiles.Units.Players.Player;
 import Game.Utils.*;
 import Game.Tiles.Units.Enemies.Enemy;
 
-import java.util.HashMap;
 import java.util.Random;
-import java.util.function.Function;
-
 
 public abstract class Unit extends Tile {
+
 
     protected String name;
     protected Resource health;
@@ -24,14 +21,6 @@ public abstract class Unit extends Tile {
     protected Board board;
     protected Random random = new Random();
 
-    /// FIXME might not need this
-    protected HashMap<Position, Function<Unit,Movement>> movementMap = new HashMap<>(){{
-        put(position.up(),unit -> new Movement.Up(unit,board));
-        put(position.down(),unit -> new Movement.Down(unit,board));
-        put(position.left(),unit -> new Movement.Left(unit,board));
-        put(position.right(),unit -> new Movement.Right(unit,board));
-        put(position,unit -> new Movement.Stay(unit,board));
-    }};
 
     public Unit(char sym, String name, int healthCap, int attack, int defense) {
         super(sym);
@@ -78,16 +67,9 @@ public abstract class Unit extends Tile {
             health.reduceAmount(damage);
     }
 
-    protected void tryMove(Position position){
-        if (movementMap.containsKey(position)) {
-            Movement movement = movementMap.get(position).apply(this);
-            movement.execute();
-        }
-    }
+    public abstract void takeTurn();
 
-    abstract void takeTurn();
-
-    abstract public void onTick();
+    public abstract void onTick();
 
     public abstract void visit(Empty empty);
     public abstract void visit(Wall wall);
