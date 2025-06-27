@@ -2,13 +2,12 @@ package Game.Tiles.Units.Enemies;
 
 import Game.Board.Board;
 import Game.Callbacks.MessageCallback;
-import Game.Callbacks.PlayerDeathCallback;
 import Game.Tiles.BoardParts.Empty;
 import Game.Tiles.BoardParts.Wall;
 import Game.Tiles.Units.Players.Player;
 import Game.Tiles.Units.Unit;
 import Game.Utils.Position;
-import View.InputQuery;
+
 
 public abstract class Enemy extends Unit {
     protected int experienceValue;
