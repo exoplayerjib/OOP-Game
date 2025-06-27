@@ -29,6 +29,9 @@ public abstract class Enemy extends Unit {
     @Override
     public void visit(Player player){
         engageCombat(player);
+        if (!player.isAlive()){
+            player.getDeathCallback().onDeath();
+        }
     }
 
     @Override

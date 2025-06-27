@@ -1,6 +1,7 @@
 package Game.Board;
 
 import Game.Callbacks.MessageCallback;
+import Game.Callbacks.PlayerDeathCallback;
 import Game.Tiles.BoardParts.Empty;
 import Game.Tiles.Tile;
 import Game.Tiles.Units.Enemies.Enemy;
@@ -23,18 +24,24 @@ public  class Board {
     private final List<Enemy> enemies;
     private Player player;
     private final MessageCallback messageCallback;
+    PlayerDeathCallback playerDeathCallback;
     private final InputQuery inputQuery;
-    private final TileFactory tileFactory = new TileFactory();
+    private final TileFactory tileFactory;
 
-    public Board(Path file, Player player, MessageCallback messageCallback, InputQuery inputQuery) throws IOException {
+    public Board(Path file, Player player, TileFactory tileFactory
+                 ,MessageCallback messageCallback, InputQuery inputQuery, PlayerDeathCallback playerDeathCallback) throws IOException {
         List<String> lines = Files.readAllLines(file);
         rows = lines.size();
         cols = lines.get(0).length();
         board = new Tile[cols][rows];
         enemies = new ArrayList<>();
         this.player = player;
+        this.tileFactory = tileFactory;
         this.inputQuery = inputQuery;
         this.messageCallback = messageCallback;
+        this.playerDeathCallback = playerDeathCallback;
+
+
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
                 char sym = lines.get(i).charAt(j);
@@ -47,7 +54,7 @@ public  class Board {
     private Tile createTile(char sym, Position position){
 
         if (sym == player.getTile()){
-            return player.init(position,messageCallback,this, inputQuery);
+            return player.init(position,messageCallback,this, inputQuery, playerDeathCallback);
         }
 
         if (tileFactory.getBoardPartSymbols().contains(sym)){

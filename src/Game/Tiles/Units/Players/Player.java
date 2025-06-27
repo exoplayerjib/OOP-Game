@@ -2,6 +2,7 @@ package Game.Tiles.Units.Players;
 
 import Game.Board.Board;
 import Game.Callbacks.MessageCallback;
+import Game.Callbacks.PlayerDeathCallback;
 import Game.Tiles.BoardParts.Empty;
 import Game.Tiles.BoardParts.Wall;
 import Game.Tiles.Tile;
@@ -23,6 +24,7 @@ public abstract class Player extends Unit {
     protected int level;
     protected SpecialAbility specialAbility;
     protected InputQuery inputQuery;
+    protected PlayerDeathCallback deathCallback;
 
     public enum Actions{
         UP, DOWN, LEFT, RIGHT, STAY, CAST
@@ -34,10 +36,19 @@ public abstract class Player extends Unit {
         this.level = 1;
     }
 
-    public Player init(Position position, MessageCallback messageCallback, Board board, InputQuery inputQuery){
+    public Player init(Position position, MessageCallback messageCallback, Board board, InputQuery inputQuery, PlayerDeathCallback deathCallback){
         super.init(position,messageCallback,board);
         this.inputQuery = inputQuery;
+        this.deathCallback = deathCallback;
         return this;
+    }
+
+    public InputQuery getInputQuery() {
+        return inputQuery;
+    }
+
+    public PlayerDeathCallback getDeathCallback() {
+        return deathCallback;
     }
 
     protected int gainHealthAmount() {
@@ -52,15 +63,15 @@ public abstract class Player extends Unit {
         return DEFENSE_ADD * level;
     }
 
-    public int getExperience() {
+    protected int getExperience() {
         return experience;
     }
 
-    public int getReqXP() {
+    protected int getReqXP() {
         return level * XP_REQ;
     }
 
-    public int getLevel() {
+    protected int getLevel() {
         return level;
     }
 
