@@ -103,4 +103,16 @@ public  class Board {
     public List<Enemy> getEnemies(){
         return enemies;
     }
+
+    public void render(){
+        StringBuilder line = new StringBuilder(cols);
+        for (int row = 0; row < rows; row++) {
+            line.setLength(0);
+            for (int col = 0; col < cols; col++) {
+                line.append(board[row][col].toString());
+            }
+            messageCallback.send(line.toString());
+        }
+        messageCallback.send(player.description());
+    }
 }
