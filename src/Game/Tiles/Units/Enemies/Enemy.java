@@ -1,9 +1,14 @@
 package Game.Tiles.Units.Enemies;
 
+import Game.Board.Board;
+import Game.Callbacks.MessageCallback;
+import Game.Callbacks.PlayerDeathCallback;
 import Game.Tiles.BoardParts.Empty;
 import Game.Tiles.BoardParts.Wall;
 import Game.Tiles.Units.Players.Player;
 import Game.Tiles.Units.Unit;
+import Game.Utils.Position;
+import View.InputQuery;
 
 public abstract class Enemy extends Unit {
     protected int experienceValue;
@@ -11,6 +16,11 @@ public abstract class Enemy extends Unit {
     public Enemy(char sym, String name, int healthCap, int attack, int defense, int experienceValue) {
         super(sym ,name ,healthCap ,attack ,defense);
         this.experienceValue = experienceValue;
+    }
+
+    public Enemy init(Position position, MessageCallback messageCallback, Board board){
+        super.init(position,messageCallback,board);
+        return this;
     }
 
     public int getExperienceValue() {
