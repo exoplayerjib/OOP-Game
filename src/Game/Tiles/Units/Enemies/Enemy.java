@@ -8,9 +8,13 @@ import Game.Tiles.Units.Unit;
 public abstract class Enemy extends Unit {
     protected int experienceValue;
 
-    public Enemy(char sym, String name, int healthCap, int attack,int defense, int experienceValue) {
+    public Enemy(char sym, String name, int healthCap, int attack, int defense, int experienceValue) {
         super(sym ,name ,healthCap ,attack ,defense);
         this.experienceValue = experienceValue;
+    }
+
+    public int getExperienceValue() {
+        return experienceValue;
     }
 
     @Override
@@ -20,19 +24,20 @@ public abstract class Enemy extends Unit {
 
     @Override
     public void visit(Enemy enemy){
-        return;
+        messageCallback.send(String.format("%s has bumped into %s",getName(),enemy.getName()));
     }
     @Override
     public void visit(Player player){
-        return;
+        engageCombat(player);
     }
+
     @Override
     public void visit(Wall wall){
         return;
     }
     @Override
     public void visit(Empty empty){
-        return;
+        board.swapPositions(this,empty);
     }
 
 }

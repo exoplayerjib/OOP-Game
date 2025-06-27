@@ -1,14 +1,14 @@
 package Game.Tiles.Units.Players;
 
 import Game.Tiles.Units.Actions.SpecialAbility;
+import Game.Tiles.Units.Enemies.Enemy;
 import Game.Tiles.Units.Unit;
 
+import java.util.Random;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 public class Warrior extends Player {
-
-
-
     private final int abilityCooldown;
     private int remainingCooldown;
 
@@ -16,18 +16,7 @@ public class Warrior extends Player {
         super(name, healthCap, attack, defense);
         this.abilityCooldown = abilityCooldown;
         remainingCooldown = 0;
-    }
-
-
-    @Override
-    protected boolean canCastAbility() {
-        return remainingCooldown == 0;
-    }
-
-    @Override
-    public void levelUp() {
-        super.levelUp();
-        remainingCooldown = 0;
+        this.specialAbility = new AvengersShield();
     }
 
     @Override
@@ -46,33 +35,72 @@ public class Warrior extends Player {
     }
 
     @Override
+    public void levelUp() {
+        super.levelUp();
+        remainingCooldown = 0;
+    }
+
+    @Override
     public void onTick() {
-        if (remainingCooldown > 0) {
+        reduceCooldown();
+    }
+
+    private void resetCooldown(){
+        remainingCooldown = abilityCooldown;
+    }
+
+    private void reduceCooldown(){
+        if (remainingCooldown > 0)
             remainingCooldown--;
+    }
+
+    @Override
+    protected boolean canCastAbility() {
+        return remainingCooldown == 0;
+    }
+
+    @Override
+    public void castSpecialAbility() {
+        if (canCastAbility()) {
+            specialAbility.execute();
+        }
+        else {
+            messageCallback.send(
+                    String.format("%s tried to cast %s, but there is a cooldown: (%d/%d)",
+                    getName(),specialAbility.getAbilityName(),remainingCooldown,abilityCooldown));
         }
     }
 
     @Override
-    public void castAbility() {
-        if(canCastAbility()){
-            specialAbility.execute();
-        }
+    public String description(){
+        return super.description() + "\tAbility Cooldown: " + remainingCooldown + "/" + abilityCooldown;
     }
 
     private class AvengersShield extends SpecialAbility{
-
         private static final int RANGE = 3;
+        private static final String NAME = "Avenger's Shield";
 
-        public AvengersShield(Supplier<Unit> targets){
-            super(RANGE,targets);
+        public AvengersShield(){
+            super(RANGE,NAME);
         }
 
         @Override
         protected void onCast() {
-            remainingCooldown = abilityCooldown;
-            health.setAmount(health.getCapacity() + 10 * defense);
-            /// implement Combat and make take 10% of this.health as damage
+            this.targets =  board.getEnemies().
+                            stream().
+                            filter(e->range(e) <= this.getRange())
+                            .collect(Collectors.toList());
+            resetCooldown();
+            health.addAmount(10 * defense);
+            messageCallback.send(String.format("%s casts %s, increasing health by %d",getName(), getAbilityName(),10*defense));
+            Enemy target = targets.get(random.nextInt(targets.size()));
+            if (targets.isEmpty()) {
+                int defenderRoll = target.rollDefense();
+                int damage = Math.max(0, (int) (0.1 * getCurrentHP()) - defenderRoll);
+                target.takeDamage(damage);
+                messageCallback.send(String.format("%s hit %s for %d ability damage",getName(), target.getName(), damage));
+                postCombat(target);
+            }
         }
     }
-
 }

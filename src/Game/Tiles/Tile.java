@@ -18,8 +18,16 @@ public abstract class Tile {
         return this;
     }
 
+    public char getTile() {
+        return tile;
+    }
+
     public double range(Tile other){
         return Math.sqrt(Math.pow(this.position.getX() - other.position.getX(), 2) + Math.pow(this.position.getY() - other.position.getY(),2));
+    }
+
+    public Position getPosition(){
+        return this.position;
     }
 
     public void setPosition(Position position) {
@@ -30,7 +38,7 @@ public abstract class Tile {
 
     @Override
     public String toString(){
-        return ""+this.tile;
+        return ""+getTile();
     }
 
     @Override

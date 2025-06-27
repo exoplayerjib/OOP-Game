@@ -1,10 +1,17 @@
 package Game.Tiles.Units.Players;
 
+import Game.Board.Board;
+import Game.Callbacks.MessageCallback;
 import Game.Tiles.BoardParts.Empty;
 import Game.Tiles.BoardParts.Wall;
+import Game.Tiles.Tile;
+import Game.Tiles.Units.Actions.Action;
+import Game.Tiles.Units.Actions.Movement;
 import Game.Tiles.Units.Actions.SpecialAbility;
 import Game.Tiles.Units.Enemies.Enemy;
 import Game.Tiles.Units.Unit;
+import Game.Utils.Position;
+import View.InputQuery;
 
 public abstract class Player extends Unit {
     public static final char playerSymbol = '@';
@@ -15,11 +22,22 @@ public abstract class Player extends Unit {
     protected int experience;
     protected int level;
     protected SpecialAbility specialAbility;
+    protected InputQuery inputQuery;
+
+    public enum Actions{
+        UP, DOWN, LEFT, RIGHT, STAY, CAST
+    }
 
     public Player(String name, int healthCap, int attack, int defense) {
         super(playerSymbol,name,healthCap,attack,defense);
         this.experience = 0;
         this.level = 1;
+    }
+
+    public Player init(Position position, MessageCallback messageCallback, Board board, InputQuery inputQuery){
+        super.init(position,messageCallback,board);
+        this.inputQuery = inputQuery;
+        return this;
     }
 
     protected int gainHealthAmount() {
@@ -42,18 +60,19 @@ public abstract class Player extends Unit {
         return level * XP_REQ;
     }
 
+    public int getLevel() {
+        return level;
+    }
+
     public void addExperience(int experience) {
         this.experience += experience;
+        messageCallback.send(String.format("%s gained %d experience points", getName(), experience));
         int levelReq = getReqXP();
         while (experience >= levelReq) {
             levelUp();
             experience -= levelReq;
             levelReq = getReqXP();
         }
-    }
-
-    public int getLevel() {
-        return level;
     }
 
     public void levelUp() {
@@ -70,19 +89,33 @@ public abstract class Player extends Unit {
 
     @Override
     public void visit(Enemy enemy){
-        return;
+        engageCombat(enemy);
+        Tile empty = postCombat(enemy);
+        if (empty != null)
+            board.swapPositions(this, empty);
     }
+
+    protected Tile postCombat(Enemy enemy){
+        if(!enemy.isAlive()) {
+            int xpValue = enemy.getExperienceValue();
+            messageCallback.send(String.format("%s killed %s, gaining %d experience points!",getName(),enemy.getName(),xpValue));
+            addExperience(xpValue);
+            return board.removeEnemy(enemy); ///might cause errors check
+        }
+        return null;
+    }
+
     @Override
     public void visit(Player player){
         return;
     }
     @Override
     public void visit(Wall wall){
-        return;
+        messageCallback.send(String.format("%s hit a wall!",getName()));
     }
     @Override
     public void visit(Empty empty){
-        return;
+        board.swapPositions(this,empty);
     }
 
     @Override
@@ -90,19 +123,26 @@ public abstract class Player extends Unit {
         visitor.visit(this);
     }
 
-    public int getSpecialAbilityRange() {
-        return specialAbility.getRange();
-    }
-
-    public abstract void castAbility();
-
 
     protected abstract boolean canCastAbility();
 
-    public void castSpecialAbility(){
-        if (canCastAbility()) {
-            specialAbility.execute();
-        }
+    public abstract void castSpecialAbility();
+
+    public void takeTurn() {
+        Actions action = inputQuery.getInput();
+        tryAct(action);
+    }
+
+    protected void tryAct(Actions action) {
+        Action exec = switch (action) {
+            case UP -> new Movement.Up(this,board);
+            case DOWN -> new Movement.Down(this,board);
+            case LEFT -> new Movement.Left(this,board);
+            case RIGHT -> new Movement.Right(this,board);
+            case STAY -> new Movement.Stay(this,board);
+            case CAST -> this::castSpecialAbility;
+        };
+        exec.execute();
     }
 
     @Override
@@ -123,5 +163,4 @@ public abstract class Player extends Unit {
     public String description(){
         return String.format("%s\tLevel: %d\tExperience: %d/%d", super.description(), getLevel(), getExperience(), getReqXP());
     }
-
 }
