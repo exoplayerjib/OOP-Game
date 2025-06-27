@@ -14,7 +14,6 @@ import Game.Tiles.Units.Players.Player;
 import Game.Tiles.Units.Players.Rogue;
 import Game.Tiles.Units.Players.Warrior;
 import Game.Utils.Position;
-import View.InputQuery;
 
 import java.util.Arrays;
 import java.util.List;

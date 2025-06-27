@@ -12,7 +12,8 @@ import Game.Tiles.Units.Actions.SpecialAbility;
 import Game.Tiles.Units.Enemies.Enemy;
 import Game.Tiles.Units.Unit;
 import Game.Utils.Position;
-import View.InputQuery;
+import View.Input.InputFunction;
+import View.Input.InputQuery;
 
 public abstract class Player extends Unit {
     public static final char playerSymbol = '@';
@@ -41,10 +42,6 @@ public abstract class Player extends Unit {
         this.inputQuery = inputQuery;
         this.deathCallback = deathCallback;
         return this;
-    }
-
-    public InputQuery getInputQuery() {
-        return inputQuery;
     }
 
     public PlayerDeathCallback getDeathCallback() {

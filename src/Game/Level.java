@@ -4,7 +4,7 @@ import Game.Board.Board;
 import Game.Callbacks.MessageCallback;
 import Game.Tiles.Units.Enemies.Enemy;
 import Game.Tiles.Units.Players.Player;
-import View.InputQuery;
+import View.Input.InputQuery;
 import View.Parser.TileFactory;
 
 import java.io.IOException;

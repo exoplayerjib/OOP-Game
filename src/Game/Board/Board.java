@@ -7,7 +7,7 @@ import Game.Tiles.Tile;
 import Game.Tiles.Units.Enemies.Enemy;
 import Game.Tiles.Units.Players.Player;
 import Game.Utils.Position;
-import View.InputQuery;
+import View.Input.InputQuery;
 import View.Parser.TileFactory;
 
 import java.io.IOException;
