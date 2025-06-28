@@ -28,26 +28,24 @@ public class LevelLoader {
         this.tileFactory = tileFactory;
         this.messageCallback = messageCallback;
         this.inputQuery = inputQuery;
-        levelFiles = Files.list(dirPath).filter(Files::isRegularFile).filter(e -> e.startsWith("level")).collect(Collectors.toList());
+        levelFiles = Files.list(dirPath).filter(Files::isRegularFile).collect(Collectors.toList());
     }
 
     public void initialize(){
-        levelList = levelFiles.stream().map(e -> {
-                        try {
-                            return new Level(e, player, tileFactory, messageCallback, inputQuery);
-                        }
-                        catch (IOException ex) {
-                            messageCallback.send("Error while loading file: " + e.toString() + "!");
-                            System.exit(-1);
-                            return null;
-                        }
-                        }).collect(Collectors.toList());
+        levelList = levelFiles.stream().map(e -> new Level(e, player, tileFactory, messageCallback, inputQuery)).collect(Collectors.toList());
+
     }
 
-    public void run(){
+    public void run() {
         for (Level level : levelList) {
-            level.run();
+            try {
+                level.init().run();
+            } catch (IOException ex) {
+                messageCallback.send("Error while loading file: " + level.getPathToFile().getFileName() + "!");
+                System.exit(-1);
+                return;
+            }
+            messageCallback.send("Congrats, all levels have been cleared!");
         }
-        messageCallback.send("Congrats, all levels have been cleared!");
     }
 }

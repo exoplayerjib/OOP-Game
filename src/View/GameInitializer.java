@@ -31,7 +31,7 @@ public class GameInitializer {
             List<Player> players = tileFactory.getPlayerList();
             int index = 1;
             for (Player p : players) {
-                sendMessage(String.format("%d. %s", ++index, p.description()));
+                sendMessage(String.format("%d. %s", index++, p.description()));
             }
             try {
                 int selection = Integer.parseInt(scanner.next()) -1;
@@ -52,7 +52,7 @@ public class GameInitializer {
         levelLoader.initialize();
     }
 
-    public void run(){
+    public void run() throws IOException {
         levelLoader.run();
     }
 

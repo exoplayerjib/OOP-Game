@@ -15,16 +15,16 @@ public class Position {
     }
 
     public Position up(){
-        return new Position(x,y+1);
-    }
-
-    public Position down(){
         return new Position(x,y-1);
     }
 
-    public Position left(){ return new Position(x-1,0); }
+    public Position down(){
+        return new Position(x,y+1);
+    }
 
-    public Position right(){ return new Position(x+1,0); }
+    public Position left(){ return new Position(x-1,y); }
+
+    public Position right(){ return new Position(x+1,y); }
 
     public int getX() {return x;}
 

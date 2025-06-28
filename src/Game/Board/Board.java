@@ -33,7 +33,7 @@ public  class Board {
         List<String> lines = Files.readAllLines(file);
         rows = lines.size();
         cols = lines.getFirst().length();
-        board = new Tile[cols][rows];
+        board = new Tile[rows][cols];
         enemies = new ArrayList<>();
         this.player = player;
         this.tileFactory = tileFactory;
@@ -42,11 +42,12 @@ public  class Board {
         this.playerDeathCallback = playerDeathCallback;
 
 
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                char sym = lines.get(i).charAt(j);
-                Position position = new Position(i, j);
-                board[i][j] = createTile(sym, position); ///TODO no checks might cause errors
+        for (int y = 0; y < rows; y++) {
+            String line = lines.get(y);
+            for (int x = 0; x < cols; x++) {
+                char sym = line.charAt(x);
+                Position position = new Position(x, y);
+                board[y][x] = createTile(sym, position); ///TODO no checks might cause errors
             }
         }
     }
@@ -61,7 +62,9 @@ public  class Board {
             return tileFactory.createBoardPart(sym,position);
         }
         if (tileFactory.getEnemySymbols().contains(sym)){
-            return tileFactory.createEnemy(sym,position,messageCallback,this);
+            Enemy enemy = tileFactory.createEnemy(sym,position,messageCallback,this);
+            enemies.add(enemy);
+            return enemy;
         }
         else {
             System.out.println("Error while loading file, no such tile: " + sym + " at position: " + position.toString() + "!");
@@ -76,14 +79,14 @@ public  class Board {
 
     public Tile getTile(Position position){
         if (inBounds(position))
-            return board[position.getX()][position.getY()];
+            return board[position.getY()][position.getX()];
         else
             return null;
     }
 
     public void setTile(Position position, Tile tile){
         if (inBounds(position))
-            board[position.getX()][position.getY()] = tile;
+            board[position.getY()][position.getX()] = tile;
     }
 
     public void swapPositions(Tile operator, Tile operatee){
@@ -121,5 +124,21 @@ public  class Board {
             messageCallback.send(line.toString());
         }
         messageCallback.send(player.description());
+    }
+
+
+    //TODO delete
+    @Override
+    public String toString() {
+        StringBuilder board = new StringBuilder(rows * cols);
+        StringBuilder line = new StringBuilder(cols);
+        for (int row = 0; row < rows; row++) {
+            line.setLength(0);
+            for (int col = 0; col < cols; col++) {
+                line.append(this.board[row][col].toString());
+            }
+            board.append(line).append('\n');
+        }
+        return board.toString();
     }
 }

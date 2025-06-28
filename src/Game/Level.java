@@ -11,19 +11,31 @@ import java.io.IOException;
 import java.nio.file.Path;
 
 public class Level {
-    private final Board board;
+    Path pathToFile;
+    private Board board;
     private final Player player;
     private final MessageCallback messageCallback;
+    TileFactory tileFactory = new TileFactory();
+    InputQuery inputQuery;
 
 
-    public Level(Path pathToFile, Player player, TileFactory tileFactory, MessageCallback messageCallback, InputQuery inputQuery) throws IOException {
+    public Level(Path pathToFile, Player player, TileFactory tileFactory, MessageCallback messageCallback, InputQuery inputQuery) {
         this.player = player;
+        this.pathToFile = pathToFile;
+        this.tileFactory = tileFactory;
+        this.inputQuery = inputQuery;
         this.messageCallback = messageCallback;
+
+    }
+
+    public Level init() throws IOException {
         board = new Board(pathToFile, player, tileFactory, messageCallback,inputQuery, this::onPlayerDeath);
+        return this;
     }
 
     public void run(){
         while (!isLevelFinished()){
+            board.render();
             takeTurns();
             onTick();
         }
@@ -49,6 +61,10 @@ public class Level {
         board.render();
         messageCallback.send("Player Died, Game is over!");
         System.exit(0);
+    }
+
+    public Path getPathToFile() {
+        return pathToFile;
     }
 
 }
