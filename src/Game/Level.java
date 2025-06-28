@@ -11,17 +11,15 @@ import java.io.IOException;
 import java.nio.file.Path;
 
 public class Level {
-    private Board board;
-    private Player player;
-    private Path pathToFile;
-    private MessageCallback messageCallback;
+    private final Board board;
+    private final Player player;
+    private final MessageCallback messageCallback;
 
 
     public Level(Path pathToFile, Player player, TileFactory tileFactory, MessageCallback messageCallback, InputQuery inputQuery) throws IOException {
-        this.pathToFile = pathToFile;
         this.player = player;
         this.messageCallback = messageCallback;
-        board = new Board(pathToFile,player, tileFactory, messageCallback,inputQuery, this::onPlayerDeath);
+        board = new Board(pathToFile, player, tileFactory, messageCallback,inputQuery, this::onPlayerDeath);
     }
 
     public void run(){
@@ -44,7 +42,7 @@ public class Level {
     }
 
     private boolean isLevelFinished(){
-        return board.getEnemies().size() == 0;
+        return board.getEnemies().isEmpty();
     }
 
     private void onPlayerDeath(){

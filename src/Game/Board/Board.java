@@ -32,7 +32,7 @@ public  class Board {
                  ,MessageCallback messageCallback, InputQuery inputQuery, PlayerDeathCallback playerDeathCallback) throws IOException {
         List<String> lines = Files.readAllLines(file);
         rows = lines.size();
-        cols = lines.get(0).length();
+        cols = lines.getFirst().length();
         board = new Tile[cols][rows];
         enemies = new ArrayList<>();
         this.player = player;

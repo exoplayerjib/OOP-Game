@@ -6,7 +6,6 @@ import Game.Tiles.Units.Players.Player.Actions;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
-import java.util.function.Function;
 
 public class ActionInput implements InputQuery{
     private final Map<Character,Actions> validInput = new HashMap<>(){{
@@ -27,6 +26,7 @@ public class ActionInput implements InputQuery{
     public Actions getInput(){
         while (true){
             char input = scanner.next().charAt(0);
+            input = Character.toLowerCase(input);
             if (validInput.containsKey(input)){
                 return validInput.get(input);
             }

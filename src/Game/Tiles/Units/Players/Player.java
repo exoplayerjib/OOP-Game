@@ -12,7 +12,6 @@ import Game.Tiles.Units.Actions.SpecialAbility;
 import Game.Tiles.Units.Enemies.Enemy;
 import Game.Tiles.Units.Unit;
 import Game.Utils.Position;
-import View.Input.InputFunction;
 import View.Input.InputQuery;
 
 public abstract class Player extends Unit {
