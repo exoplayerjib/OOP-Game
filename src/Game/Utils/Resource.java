@@ -14,7 +14,9 @@ public class Resource {
     }
 
     public void setCapacity(int capacity) {
-        this.capacity = capacity;
+        if (capacity > this.capacity) {
+            this.capacity = capacity;
+        }
     }
 
     public void addCapacity(int capacity) {
