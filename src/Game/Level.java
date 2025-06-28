@@ -1,6 +1,7 @@
 package Game;
 
 import Game.Board.Board;
+import Game.Board.GameBoard;
 import Game.Callbacks.MessageCallback;
 import Game.Tiles.Units.Enemies.Enemy;
 import Game.Tiles.Units.Players.Player;
@@ -12,7 +13,7 @@ import java.nio.file.Path;
 
 public class Level {
     Path pathToFile;
-    private Board board;
+    private GameBoard board;
     private final Player player;
     private final MessageCallback messageCallback;
     TileFactory tileFactory = new TileFactory();

@@ -1,6 +1,7 @@
 package Game.Tiles.Units;
 
 import Game.Board.Board;
+import Game.Board.GameBoard;
 import Game.Callbacks.MessageCallback;
 import Game.Tiles.BoardParts.*;
 import Game.Tiles.Tile;
@@ -18,7 +19,7 @@ public abstract class Unit extends Tile {
     protected int attack;
     protected int defense;
     protected MessageCallback messageCallback;
-    protected Board board;
+    protected GameBoard board;
     protected Random random = new Random();
 
 
@@ -31,7 +32,7 @@ public abstract class Unit extends Tile {
     }
 
 
-    public Unit init(Position position, MessageCallback messageCallback, Board board) {
+    public Unit init(Position position, MessageCallback messageCallback, GameBoard board) {
         super.init(position);
         this.messageCallback = messageCallback;
         this.board = board;

@@ -1,6 +1,7 @@
 package Game.Tiles.Units.Enemies;
 
 import Game.Board.Board;
+import Game.Board.GameBoard;
 import Game.Callbacks.MessageCallback;
 import Game.Tiles.BoardParts.Empty;
 import Game.Tiles.BoardParts.Wall;
@@ -17,7 +18,7 @@ public abstract class Enemy extends Unit {
         this.experienceValue = experienceValue;
     }
 
-    public Enemy init(Position position, MessageCallback messageCallback, Board board){
+    public Enemy init(Position position, MessageCallback messageCallback, GameBoard board){
         super.init(position,messageCallback,board);
         return this;
     }

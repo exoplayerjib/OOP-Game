@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public  class Board {
+public  class Board implements GameBoard {
     private final int rows;
     private final int cols;
     private final Tile[][] board;

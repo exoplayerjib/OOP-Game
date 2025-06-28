@@ -1,6 +1,7 @@
 package Game.Tiles.Units.Players;
 
 import Game.Board.Board;
+import Game.Board.GameBoard;
 import Game.Callbacks.MessageCallback;
 import Game.Callbacks.PlayerDeathCallback;
 import Game.Tiles.BoardParts.Empty;
@@ -37,7 +38,7 @@ public abstract class Player extends Unit {
         this.level = 1;
     }
 
-    public Player init(Position position, MessageCallback messageCallback, Board board, InputQuery inputQuery, PlayerDeathCallback deathCallback){
+    public Player init(Position position, MessageCallback messageCallback, GameBoard board, InputQuery inputQuery, PlayerDeathCallback deathCallback){
         super.init(position,messageCallback,board);
         this.inputQuery = inputQuery;
         this.deathCallback = deathCallback;

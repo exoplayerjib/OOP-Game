@@ -1,20 +1,21 @@
 package Game.Tiles.Units.Actions;
 
 import Game.Board.Board;
+import Game.Board.GameBoard;
 import Game.Tiles.Tile;
 import Game.Tiles.Units.Unit;
 import Game.Utils.Position;
 
 public abstract class Movement implements Action {
     Unit unit;
-    Board board;
-    public Movement(Unit unit, Board board){
+    GameBoard board;
+    public Movement(Unit unit, GameBoard board){
         this.unit = unit;
         this.board = board;
     }
 
     public static class Up extends Movement{
-        public Up(Unit unit, Board board){
+        public Up(Unit unit, GameBoard board){
             super(unit,board);
         }
 
@@ -27,7 +28,7 @@ public abstract class Movement implements Action {
     }
 
     public static class Down extends Movement{
-        public Down(Unit unit, Board board){
+        public Down(Unit unit, GameBoard board){
             super(unit,board);
         }
         @Override
@@ -39,7 +40,7 @@ public abstract class Movement implements Action {
     }
 
     public static class Left extends Movement{
-        public Left(Unit unit, Board board){
+        public Left(Unit unit, GameBoard board){
             super(unit,board);
         }
         @Override
@@ -51,7 +52,7 @@ public abstract class Movement implements Action {
     }
 
     public static class Right extends Movement{
-        public Right(Unit unit, Board board){
+        public Right(Unit unit, GameBoard board){
             super(unit,board);
         }
         @Override
@@ -63,7 +64,7 @@ public abstract class Movement implements Action {
     }
     
     public static class Stay extends Movement{
-        public Stay(Unit unit, Board board) {
+        public Stay(Unit unit, GameBoard board) {
             super(unit, board);
         }
 

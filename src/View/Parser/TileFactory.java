@@ -2,6 +2,7 @@ package View.Parser;
 
 
 import Game.Board.Board;
+import Game.Board.GameBoard;
 import Game.Callbacks.MessageCallback;
 import Game.Tiles.BoardParts.Empty;
 import Game.Tiles.BoardParts.Wall;
@@ -85,7 +86,7 @@ public class TileFactory {
         }
     }
 
-    public Enemy createEnemy(char sym, Position position, MessageCallback messageCallback, Board board){
+    public Enemy createEnemy(char sym, Position position, MessageCallback messageCallback, GameBoard board){
         if (enemyRepository.containsKey(sym)){
             return enemyRepository.get(sym).get().init(position,messageCallback,board);
         }
