@@ -95,7 +95,11 @@ public class TileFactory {
             return null;
         }
     }
-    
+
+    public List<Player> getPlayerList(){
+        return playerRepository.stream().map(Supplier::get).collect(Collectors.toList());
+    }
+
     public List<Character> getEnemySymbols(){
         return enemyRepository.keySet().stream().toList();
     }
