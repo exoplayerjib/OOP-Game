@@ -41,7 +41,7 @@ public class Warrior extends Player {
     }
 
     @Override
-    public void onTick() {
+    protected void onTickActions(){
         reduceCooldown();
     }
 
@@ -63,6 +63,7 @@ public class Warrior extends Player {
     public void castSpecialAbility() {
         if (canCastAbility()) {
             specialAbility.execute();
+            hasCasted = true;
         }
         else {
             messageCallback.send(
@@ -93,12 +94,12 @@ public class Warrior extends Player {
             resetCooldown();
             health.addAmount(10 * defense);
             messageCallback.send(String.format("%s casts %s, increasing health by %d",getName(), getAbilityName(),10*defense));
-            Enemy target = targets.get(random.nextInt(targets.size()));
-            if (targets.isEmpty()) {
+            if (!targets.isEmpty()) {
+                Enemy target = targets.get(random.nextInt(targets.size()));
                 int defenderRoll = target.rollDefense();
                 int damage = Math.max(0, (int) (0.1 * getCurrentHP()) - defenderRoll);
                 target.takeDamage(damage);
-                messageCallback.send(String.format("%s hit %s for %d ability damage",getName(), target.getName(), damage));
+                messageCallback.send(String.format(" ~ %s hit %s for %d ability damage\n",getName(), target.getName(), damage));
                 postCombat(target);
             }
         }

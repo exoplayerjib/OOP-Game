@@ -79,32 +79,32 @@ public abstract class Unit extends Tile {
 
     public int rollDefense(){
         int defenseRoll = random.nextInt(getDefense()+1);
-        messageCallback.send(String.format("%s rolled %d defense points",getName(),defenseRoll));
+        messageCallback.send(String.format(" - %s rolled %d defense points",getName(),defenseRoll));
         return defenseRoll;
     }
 
     public int rollAttack(){
         int attackRoll = random.nextInt(getAttack()+1);
-        messageCallback.send(String.format("%s rolled %d attack points",getName(),attackRoll));
+        messageCallback.send(String.format(" - %s rolled %d attack points",getName(),attackRoll));
         return attackRoll;
     }
 
     protected void engageCombat(Unit defender){
         messageCallback.send(String.format("%s engaged in combat with %s",getName(),defender.getName()));
-        messageCallback.send(description());
-        messageCallback.send(defender.description());
+        messageCallback.send(" - " + description());
+        messageCallback.send(" - " + defender.description());
         int attackerRoll = this.rollAttack();
         int defenderRoll = defender.rollDefense();
         int damage = Math.max(0,attackerRoll - defenderRoll);
-        messageCallback.send(String.format("%s dealt %d damage to %s",getName(),damage,defender.getName()));
+        messageCallback.send(String.format(" ~ %s dealt %d damage to %s",getName(),damage,defender.getName()));
         defender.takeDamage(damage);
         if (!defender.isAlive()){
-            messageCallback.send(String.format("%s killed %s",getName(),defender.getName()));
+            messageCallback.send(String.format(" --- %s killed %s --- ",getName(),defender.getName()));
         }
     }
 
     public String description() {
-        return String.format("Name: %s\tHealth: (%d/%d)\tAttack: %d\tDefense: %d",getName(),getCurrentHP(),getMaxHP(),getAttack(),getDefense());
+        return String.format("%s\t\tHealth: (%d/%d)\tAttack: %d\tDefense: %d",getName(),getCurrentHP(),getMaxHP(),getAttack(),getDefense());
     }
 
     @Override

@@ -34,11 +34,14 @@ public class Level {
     }
 
     public void run(){
-        while (!isLevelFinished()){
-            board.render();
-            takeTurns();
-            onTick();
-        }
+        while (!isLevelFinished())
+            gameTick();
+    }
+
+    private void gameTick(){
+        board.render();
+        takeTurns();
+        onTick();
     }
 
     private void takeTurns(){

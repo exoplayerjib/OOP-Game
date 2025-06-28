@@ -47,7 +47,7 @@ public  class Board {
             for (int x = 0; x < cols; x++) {
                 char sym = line.charAt(x);
                 Position position = new Position(x, y);
-                board[y][x] = createTile(sym, position); ///TODO no checks might cause errors
+                board[y][x] = createTile(sym, position);
             }
         }
     }
@@ -127,7 +127,7 @@ public  class Board {
     }
 
 
-    //TODO delete
+    //TODO delete only for debugging
     @Override
     public String toString() {
         StringBuilder board = new StringBuilder(rows * cols);

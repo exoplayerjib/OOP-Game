@@ -42,7 +42,7 @@ public class Mage extends Player{
     }
 
     @Override
-    public void onTick() {
+    protected void onTickActions() {
         mana.addAmount(level);
     }
 
@@ -53,8 +53,10 @@ public class Mage extends Player{
 
     @Override
     public void castSpecialAbility() {
-        if (canCastAbility())
+        if (canCastAbility()){
             specialAbility.execute();
+            hasCasted = true;
+        }
         else
             messageCallback.send(String.format("%s tried to cast %s, but there is not enough mana: %d/%d",
                     getName(),specialAbility.getAbilityName(),mana.getAmount(),abilityCost));
@@ -90,7 +92,7 @@ public class Mage extends Player{
                     int defenderRoll = target.rollDefense();
                     int damage = Math.max(0,spellPower - defenderRoll);
                     target.takeDamage(damage);
-                    messageCallback.send(String.format("%s hit %s for %d ability damage",getName(), target.getName(), damage));
+                    messageCallback.send(String.format(" ~ %s hit %s for %d ability damage\n",getName(), target.getName(), damage));
                     postCombat(target);
                 }
             }

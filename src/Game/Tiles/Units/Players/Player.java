@@ -25,6 +25,7 @@ public abstract class Player extends Unit {
     protected SpecialAbility specialAbility;
     protected InputQuery inputQuery;
     protected PlayerDeathCallback deathCallback;
+    protected boolean hasCasted = false;
 
     public enum Actions{
         UP, DOWN, LEFT, RIGHT, STAY, CAST
@@ -75,9 +76,9 @@ public abstract class Player extends Unit {
         this.experience += experience;
         messageCallback.send(String.format("%s gained %d experience points", getName(), experience));
         int levelReq = getReqXP();
-        while (experience >= levelReq) {
+        while (this.experience >= levelReq) {
             levelUp();
-            experience -= levelReq;
+            this.experience -= levelReq;
             levelReq = getReqXP();
         }
     }
@@ -139,6 +140,15 @@ public abstract class Player extends Unit {
         Actions action = inputQuery.getInput();
         tryAct(action);
     }
+
+    public void onTick(){
+        if(!hasCasted)
+            onTickActions();
+        else
+            hasCasted = false;
+    }
+
+    protected abstract void onTickActions();
 
     protected void tryAct(Actions action) {
         Action exec = switch (action) {

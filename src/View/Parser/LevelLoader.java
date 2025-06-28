@@ -45,7 +45,8 @@ public class LevelLoader {
                 System.exit(-1);
                 return;
             }
-            messageCallback.send("Congrats, all levels have been cleared!");
+            messageCallback.send("Level Cleared! great job.");
         }
+        messageCallback.send("Congrats, all levels have been cleared!");
     }
 }
