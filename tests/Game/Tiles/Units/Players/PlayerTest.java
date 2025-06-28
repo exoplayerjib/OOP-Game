@@ -155,6 +155,13 @@ class PlayerTest {
             p.takeTurn();
             assertEquals(expected,p.getPosition());
         }
+        setBoards(cast);
+        for (Player p : players) {
+            while (p.canCastAbility()){
+                p.takeTurn();
+            }
+            assertEquals(false,p.canCastAbility());
+        }
     }
 
 }
