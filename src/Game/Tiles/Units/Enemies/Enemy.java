@@ -34,7 +34,7 @@ public abstract class Enemy extends Unit {
 
     @Override
     public void visit(Enemy enemy){
-        messageCallback.send(String.format("%s has bumped into %s",getName(),enemy.getName()));
+        return;
     }
     @Override
     public void visit(Player player){
