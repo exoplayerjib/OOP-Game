@@ -19,6 +19,14 @@ public class Warrior extends Player {
         this.specialAbility = new AvengersShield();
     }
 
+    public int getAbilityCooldown() {
+        return abilityCooldown;
+    }
+
+    public int getRemainingCooldown() {
+        return remainingCooldown;
+    }
+
     @Override
     protected int gainHealthAmount(){
         return super.gainHealthAmount() + 5 * level;
@@ -74,7 +82,7 @@ public class Warrior extends Player {
 
     @Override
     public String description(){
-        return super.description() + "\tAbility Cooldown: " + remainingCooldown + "/" + abilityCooldown;
+        return super.description() + "\tAbility Cooldown: " + getRemainingCooldown() + "/" + getAbilityCooldown();
     }
 
     private class AvengersShield extends SpecialAbility{

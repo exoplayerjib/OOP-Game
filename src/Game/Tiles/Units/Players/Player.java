@@ -104,20 +104,11 @@ public abstract class Player extends Unit {
             board.swapPositions(this, empty);
     }
 
-    protected Tile postCombat(Enemy enemy){
-        if(!enemy.isAlive()) {
-            int xpValue = enemy.getExperienceValue();
-            messageCallback.send(String.format("%s killed %s, gaining %d experience points!",getName(),enemy.getName(),xpValue));
-            addExperience(xpValue);
-            return board.removeEnemy(enemy); ///might cause errors check
-        }
-        return null;
-    }
-
     @Override
     public void visit(Player player){
         return;
     }
+
     @Override
     public void visit(Wall wall){
         messageCallback.send(String.format("%s hit a wall!",getName()));
@@ -126,10 +117,19 @@ public abstract class Player extends Unit {
     public void visit(Empty empty){
         board.swapPositions(this,empty);
     }
-
     @Override
     public void accept(Unit visitor){
         visitor.visit(this);
+    }
+
+    protected Tile postCombat(Enemy enemy){
+        if(!enemy.isAlive()) {
+            int xpValue = enemy.getExperienceValue();
+            messageCallback.send(String.format("%s killed %s, gaining %d experience points!",getName(),enemy.getName(),xpValue));
+            addExperience(xpValue);
+            return board.removeEnemy(enemy); ///might cause errors check
+        }
+        return null;
     }
 
 
