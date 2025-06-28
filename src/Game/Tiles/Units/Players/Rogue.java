@@ -1,6 +1,5 @@
 package Game.Tiles.Units.Players;
 
-import Game.Tiles.Units.Actions.SpecialAbility;
 import Game.Tiles.Units.Enemies.Enemy;
 import Game.Utils.Resource;
 
@@ -8,8 +7,8 @@ public class Rogue extends Player{
     private static final int INITIAL_ENERGY = 100;
     private static final int ENERGY_INC = 100;
 
-    private int cost;
-    private Resource energy;
+    private final int cost;
+    private final Resource energy;
 
     public Rogue(String name, int healthCap, int attack, int defense, int cost){
         super(name, healthCap, attack, defense);
@@ -40,16 +39,11 @@ public class Rogue extends Player{
     }
 
     @Override
-    public void castSpecialAbility() {
-        if (canCastAbility()) {
-            specialAbility.execute();
-            hasCasted = true;
-        }
-        else {
-            messageCallback.send(
-                    String.format("%s tried to cast %s, but there is not enough energy: (%d/%d)",
-                            getName(),specialAbility.getAbilityName(),energy.getAmount(),cost));
-        }
+    protected void failedToCastMessage() {
+        messageCallback.send(
+                String.format("%s tried to cast %s, but there is not enough energy: (%d/%d)",
+                        getName(),specialAbility.getAbilityName(),energy.getAmount(),cost));
+
     }
 
     @Override

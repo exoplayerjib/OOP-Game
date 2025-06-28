@@ -1,6 +1,5 @@
 package Game.Tiles.Units.Players;
 
-import Game.Tiles.Units.Actions.SpecialAbility;
 import Game.Tiles.Units.Enemies.Enemy;
 import Game.Utils.Resource;
 
@@ -8,13 +7,11 @@ import java.util.stream.Collectors;
 
 public class Mage extends Player{
     private static final int MANA_INCREASE = 25;
-    private static int SPELL_POWER_INCREASE = 10;
+    private static final int SPELL_POWER_INCREASE = 10;
 
-    private Resource mana;
-    private int abilityCost;
+    private final Resource mana;
+    private final int abilityCost;
     private int spellPower;
-    private int hitCount;
-    private int abilityRange;
 
     public Mage(String name, int healthCap, int attack, int defense, int initialMana,int abilityCost,
                 int spellPower, int hitCount, int abilityRange){
@@ -22,8 +19,6 @@ public class Mage extends Player{
         mana = new Resource(initialMana,initialMana/4);
         this.abilityCost = abilityCost;
         this.spellPower = spellPower;
-        this.hitCount = hitCount;
-        this.abilityRange = abilityRange;
         this.specialAbility = new Blizzard(abilityRange,hitCount);
     }
 
@@ -52,14 +47,10 @@ public class Mage extends Player{
     }
 
     @Override
-    public void castSpecialAbility() {
-        if (canCastAbility()){
-            specialAbility.execute();
-            hasCasted = true;
-        }
-        else
-            messageCallback.send(String.format("%s tried to cast %s, but there is not enough mana: %d/%d",
-                    getName(),specialAbility.getAbilityName(),mana.getAmount(),abilityCost));
+    protected void failedToCastMessage() {
+        messageCallback.send(String.format("%s tried to cast %s, but there is not enough mana: %d/%d",
+                getName(),specialAbility.getAbilityName(),mana.getAmount(),abilityCost));
+
     }
 
     @Override

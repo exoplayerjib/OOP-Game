@@ -1,11 +1,7 @@
 package Game.Tiles.Units.Players;
 
-import Game.Tiles.Units.Actions.SpecialAbility;
 import Game.Tiles.Units.Enemies.Enemy;
-import Game.Tiles.Units.Unit;
 
-import java.util.Random;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class Warrior extends Player {
@@ -68,16 +64,11 @@ public class Warrior extends Player {
     }
 
     @Override
-    public void castSpecialAbility() {
-        if (canCastAbility()) {
-            specialAbility.execute();
-            hasCasted = true;
-        }
-        else {
-            messageCallback.send(
-                    String.format("%s tried to cast %s, but there is a cooldown: (%d/%d)",
-                    getName(),specialAbility.getAbilityName(),remainingCooldown,abilityCooldown));
-        }
+    protected void failedToCastMessage() {
+        messageCallback.send(
+                String.format("%s tried to cast %s, but there is a cooldown: (%d/%d)",
+                        getName(),specialAbility.getAbilityName(),remainingCooldown,abilityCooldown));
+
     }
 
     @Override

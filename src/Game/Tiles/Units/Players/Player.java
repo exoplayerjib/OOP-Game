@@ -1,6 +1,5 @@
 package Game.Tiles.Units.Players;
 
-import Game.Board.Board;
 import Game.Board.GameBoard;
 import Game.Callbacks.MessageCallback;
 import Game.Callbacks.PlayerDeathCallback;
@@ -8,12 +7,14 @@ import Game.Tiles.BoardParts.Empty;
 import Game.Tiles.BoardParts.Wall;
 import Game.Tiles.Tile;
 import Game.Tiles.Units.Actions.Action;
+import Game.Tiles.Units.Actions.CastAbility;
 import Game.Tiles.Units.Actions.Movement;
-import Game.Tiles.Units.Actions.SpecialAbility;
 import Game.Tiles.Units.Enemies.Enemy;
 import Game.Tiles.Units.Unit;
 import Game.Utils.Position;
 import View.Input.InputQuery;
+
+import java.util.List;
 
 public abstract class Player extends Unit {
     public static final char playerSymbol = '@';
@@ -48,6 +49,8 @@ public abstract class Player extends Unit {
     public PlayerDeathCallback getDeathCallback() {
         return deathCallback;
     }
+
+    public SpecialAbility getSpecialAbility() { return specialAbility; }
 
     protected int gainHealthAmount() {
         return HEALTH_ADD * level;
@@ -132,10 +135,17 @@ public abstract class Player extends Unit {
         return null;
     }
 
-
     protected abstract boolean canCastAbility();
 
-    public abstract void castSpecialAbility();
+    public void castSpecialAbility(){
+        if (canCastAbility()){
+            specialAbility.execute();
+            hasCasted = true;
+        }
+        else failedToCastMessage();
+    }
+
+    protected abstract void failedToCastMessage();
 
     public void takeTurn() {
         Actions action = inputQuery.getInput();
@@ -158,7 +168,7 @@ public abstract class Player extends Unit {
             case LEFT -> new Movement.Left(this,board);
             case RIGHT -> new Movement.Right(this,board);
             case STAY -> new Movement.Stay(this,board);
-            case CAST -> this::castSpecialAbility;
+            case CAST -> new CastAbility(this);
         };
         exec.execute();
     }
@@ -180,5 +190,30 @@ public abstract class Player extends Unit {
     @Override
     public String description(){
         return String.format("%s\tLevel: %d\tExperience: %d/%d", super.description(), getLevel(), getExperience(), getReqXP());
+    }
+
+    public abstract class SpecialAbility implements Action{
+        protected int range;
+        protected String name;
+        protected List<Enemy> targets;
+
+        public SpecialAbility(int range, String name){
+            this.range = range;
+            this.name = name;
+        }
+
+        public void execute(){
+            onCast();
+        }
+
+        protected abstract void onCast();
+
+        public String getAbilityName(){
+            return name;
+        }
+
+        public int getRange(){
+            return range;
+        }
     }
 }
