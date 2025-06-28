@@ -64,7 +64,7 @@ public class Rogue extends Player{
             messageCallback.send(String.format("%s casts %s, reducing energy by %d",getName(),getAbilityName(),cost));
             this.targets = board.getEnemies()
                     .stream()
-                    .filter(e -> range(e) <= this.getRange())
+                    .filter(e -> range(e) <= this.getAbilityRange())
                     .collect(java.util.stream.Collectors.toList());
             for (Enemy target : targets) {
                 int defenderRoll = target.rollDefense();

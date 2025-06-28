@@ -88,7 +88,7 @@ public class Warrior extends Player {
         protected void onCast() {
             this.targets =  board.getEnemies().
                             stream().
-                            filter(e->range(e) <= this.getRange())
+                            filter(e->range(e) <= this.getAbilityRange())
                             .collect(Collectors.toList());
             resetCooldown();
             health.addAmount(10 * defense);

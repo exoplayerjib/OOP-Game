@@ -62,7 +62,7 @@ public class Mage extends Player{
     private class Blizzard extends SpecialAbility{
         private final int hitCount;
 
-        public Blizzard(int range, int hitCount){
+        private Blizzard(int range, int hitCount){
             super(range, "Blizzard");
             this.hitCount = hitCount;
         }
@@ -74,7 +74,7 @@ public class Mage extends Player{
             for (int hits = 0; hits < hitCount; hits++) {
                 this.targets = board.getEnemies()
                         .stream()
-                        .filter(e -> range(e) <= this.getRange())
+                        .filter(e -> range(e) <= this.getAbilityRange())
                         .collect(Collectors.toList());
                 if (targets.isEmpty())
                     return;

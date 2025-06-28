@@ -212,7 +212,7 @@ public abstract class Player extends Unit {
             return name;
         }
 
-        public int getRange(){
+        public int getAbilityRange(){
             return range;
         }
     }
