@@ -192,7 +192,7 @@ public abstract class Player extends Unit {
         return String.format("%s\tLevel: %d\tExperience: %d/%d", super.description(), getLevel(), getExperience(), getReqXP());
     }
 
-    public abstract class SpecialAbility implements Action{
+    public abstract class SpecialAbility{
         protected int range;
         protected String name;
         protected List<Enemy> targets;
