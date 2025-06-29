@@ -93,7 +93,8 @@ public class Hunter extends Player {
             int defenderRoll = target.rollDefense();
             int damage = Math.max(0,getAttack()-defenderRoll);
             target.takeDamage(damage);
-            messageCallback.send(String.format(" ~ %s hit %s for %d ability damage\n",getName(), target.getName(), damage));
+            messageCallback.send(String.format(" ~ %s hit %s for %d ability damage",getName(), target.getName(), damage));
+            messageCallback.send(target.description()+"\n");
             postCombat(target);
         }
     }

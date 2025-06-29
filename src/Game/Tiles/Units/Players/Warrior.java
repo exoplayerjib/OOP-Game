@@ -98,7 +98,8 @@ public class Warrior extends Player {
                 int defenderRoll = target.rollDefense();
                 int damage = Math.max(0, (int) (0.1 * getCurrentHP()) - defenderRoll);
                 target.takeDamage(damage);
-                messageCallback.send(String.format(" ~ %s hit %s for %d ability damage\n",getName(), target.getName(), damage));
+                messageCallback.send(String.format(" ~ %s hit %s for %d ability damage",getName(), target.getName(), damage));
+                messageCallback.send(target.description()+"\n");
                 postCombat(target);
             }
         }
