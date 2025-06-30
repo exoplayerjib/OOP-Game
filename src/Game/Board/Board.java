@@ -125,20 +125,4 @@ public  class Board implements GameBoard {
         }
         messageCallback.send(player.description());
     }
-
-
-    //TODO delete only for debugging
-    @Override
-    public String toString() {
-        StringBuilder board = new StringBuilder(rows * cols);
-        StringBuilder line = new StringBuilder(cols);
-        for (int row = 0; row < rows; row++) {
-            line.setLength(0);
-            for (int col = 0; col < cols; col++) {
-                line.append(this.board[row][col].toString());
-            }
-            board.append(line).append('\n');
-        }
-        return board.toString();
-    }
 }
